@@ -16,5 +16,12 @@ export const listConversationsQuerySchema = z.object({
   search: z.string().trim().optional(),
 });
 
+export const chatRequestSchema = z.object({
+  conversationId: z.string().uuid({ message: 'conversationId must be a valid UUID' }).optional(),
+  message: z.string().trim().min(1, { message: 'Message cannot be empty' }),
+  timezone: z.string().optional().default('UTC'),
+});
+
 export type CreateConversationInput = z.infer<typeof createConversationSchema>;
+export type ChatRequestInput = z.infer<typeof chatRequestSchema>;
 

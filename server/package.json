@@ -9,10 +9,12 @@
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "migrate": "tsx src/db/migrate.ts"
+    "migrate": "tsx src/db/migrate.ts",
+    "smoke:curl": "tsx scripts/smoke-curl.ts"
   },
   "dependencies": {
     "@fastify/cors": "^10.0.2",
+    "@fastify/rate-limit": "^10.2.2",
     "chrono-node": "^2.7.7",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
