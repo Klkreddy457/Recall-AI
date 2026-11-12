@@ -24,3 +24,4 @@ export function hasMemoryCue(query: string): boolean {
 
   return MEMORY_CUE_PATTERNS.some((pattern) => pattern.test(trimmed));
 }
+
