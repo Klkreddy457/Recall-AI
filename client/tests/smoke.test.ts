@@ -5,3 +5,4 @@ describe('Client smoke test', () => {
     expect(true).toBe(true);
   });
 });
+
