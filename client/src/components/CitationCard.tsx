@@ -40,3 +40,4 @@ export function CitationCard({ source }: CitationCardProps) {
     </a>
   );
 }
+

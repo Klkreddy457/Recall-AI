@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "migrate": "tsx src/db/migrate.ts",
-    "smoke:curl": "tsx scripts/smoke-curl.ts"
+    "smoke:curl": "tsx scripts/smoke-curl.ts",
+    "eval": "tsx src/eval/runner.ts",
+    "bench": "tsx src/bench/benchmark.ts"
   },
   "dependencies": {
     "@fastify/cors": "^10.0.2",

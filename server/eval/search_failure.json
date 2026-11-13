@@ -1,0 +1,13 @@
+[
+  {
+    "id": "sf-1",
+    "category": "search_failure",
+    "query": "What is the live stock price of Tesla right now?",
+    "mockSearchError": "Tavily 504 Gateway Timeout",
+    "expect": {
+      "searchCalled": true,
+      "toolResultMatches": "search unavailable",
+      "contentContains": ["unavailable"]
+    }
+  }
+]

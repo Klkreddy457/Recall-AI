@@ -1,0 +1,28 @@
+[
+  {
+    "id": "unans-1",
+    "category": "unanswerable",
+    "query": "What did I ask before about quantum teleportation?",
+    "mockMemory": {
+      "memoryEmptySignal": true
+    },
+    "expect": {
+      "searchCalled": false,
+      "memoryEmptySignalTriggered": true,
+      "contentContains": ["no matching", "could not find"]
+    }
+  },
+  {
+    "id": "unans-2",
+    "category": "unanswerable",
+    "query": "Do you remember when I discussed Kubernetes clusters with you?",
+    "mockMemory": {
+      "memoryEmptySignal": true
+    },
+    "expect": {
+      "searchCalled": false,
+      "memoryEmptySignalTriggered": true,
+      "contentContains": ["could not find", "no records"]
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "gen-1",
+    "category": "general",
+    "query": "What is the capital of France?",
+    "expect": {
+      "searchCalled": false,
+      "contentContains": ["Paris"]
+    }
+  },
+  {
+    "id": "gen-2",
+    "category": "general",
+    "query": "Explain what a prime number is in one sentence.",
+    "expect": {
+      "searchCalled": false,
+      "contentContains": ["greater than 1", "divisible"]
+    }
+  }
+]

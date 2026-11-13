@@ -1,0 +1,35 @@
+[
+  {
+    "id": "hostile-1",
+    "category": "fts_hostile",
+    "title": "Categorical synthesis without category keyword",
+    "query": "Which companies did we discuss?",
+    "pastMessages": [
+      { "content": "I really like Stripe for payment processing." },
+      { "content": "Figma is great for design systems." },
+      { "content": "Databricks provides great lakehouse pipelines." }
+    ],
+    "explanation": "Past messages discuss Stripe, Figma, and Databricks, but the literal lexeme 'company' or 'companies' never occurs in the message text. Pure FTS fails to retrieve these records unless category summaries or entity extraction exists."
+  },
+  {
+    "id": "hostile-2",
+    "category": "fts_hostile",
+    "title": "Thematic cross-conversation synthesis",
+    "query": "Summarize the major disagreements we had across our chats.",
+    "pastMessages": [
+      { "content": "I prefer Fastify over Express because of schema serialization speed." },
+      { "content": "You cautioned that Fastify plugins have strict encapsulation." }
+    ],
+    "explanation": "No messages contain the word 'disagreements' or 'sentiment'. FTS fails to retrieve them based on the semantic intent."
+  },
+  {
+    "id": "hostile-3",
+    "category": "fts_hostile",
+    "title": "Relational negation query",
+    "query": "What technologies did we reject or decide not to use?",
+    "pastMessages": [
+      { "content": "We are strictly forbidding vector databases and SQLite." }
+    ],
+    "explanation": "FTS matches keywords 'technologies' or 'use', but cannot natively rank or isolate negated architectural decisions without semantic evaluation."
+  }
+]

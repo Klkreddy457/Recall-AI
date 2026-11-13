@@ -1,0 +1,22 @@
+[
+  {
+    "id": "time-1",
+    "category": "time_sensitive",
+    "query": "What were the top news headlines today?",
+    "expect": {
+      "searchCalled": true,
+      "searchQueryContains": "news",
+      "citationsExpected": true
+    }
+  },
+  {
+    "id": "time-2",
+    "category": "time_sensitive",
+    "query": "What is the current stock price of Apple today?",
+    "expect": {
+      "searchCalled": true,
+      "searchQueryContains": "Apple",
+      "citationsExpected": true
+    }
+  }
+]

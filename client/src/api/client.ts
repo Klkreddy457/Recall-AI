@@ -94,3 +94,4 @@ export async function fetchMessages(conversationId: string): Promise<Message[]> 
   const data = (await res.json()) as { messages: Message[] };
   return data.messages;
 }
+

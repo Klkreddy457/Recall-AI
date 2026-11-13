@@ -1,0 +1,84 @@
+[
+  {
+    "id": "hist-1",
+    "category": "historical",
+    "query": "What did I ask yesterday?",
+    "mockMemory": {
+      "temporal": {
+        "range": { "text": "yesterday", "start": "2026-11-12T00:00:00Z", "end": "2026-11-13T00:00:00Z" },
+        "groups": [
+          {
+            "conversationId": "c-1",
+            "conversationTitle": "Postgres Chat",
+            "pairs": [
+              {
+                "conversationId": "c-1",
+                "userMessage": {
+                  "id": "u-1",
+                  "conversation_id": "c-1",
+                  "role": "user",
+                  "content": "How do GIN indexes work in PostgreSQL?",
+                  "status": "complete",
+                  "created_at": "2026-11-12T14:00:00Z"
+                },
+                "assistantMessage": {
+                  "id": "a-1",
+                  "conversation_id": "c-1",
+                  "role": "assistant",
+                  "content": "GIN indexes handle composite values like tsvector and jsonb.",
+                  "status": "complete",
+                  "created_at": "2026-11-12T14:00:05Z"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "expect": {
+      "searchCalled": false,
+      "contentContains": ["GIN indexes", "PostgreSQL"]
+    }
+  },
+  {
+    "id": "hist-2",
+    "category": "historical",
+    "query": "What did we discuss last Monday?",
+    "mockMemory": {
+      "temporal": {
+        "range": { "text": "last Monday", "start": "2026-11-09T00:00:00Z", "end": "2026-11-10T00:00:00Z" },
+        "groups": [
+          {
+            "conversationId": "c-2",
+            "conversationTitle": "Architecture Review",
+            "pairs": [
+              {
+                "conversationId": "c-2",
+                "userMessage": {
+                  "id": "u-2",
+                  "conversation_id": "c-2",
+                  "role": "user",
+                  "content": "Should we use vector databases or relational FTS?",
+                  "status": "complete",
+                  "created_at": "2026-11-09T10:00:00Z"
+                },
+                "assistantMessage": {
+                  "id": "a-2",
+                  "conversation_id": "c-2",
+                  "role": "assistant",
+                  "content": "We chose relational FTS with PostgreSQL.",
+                  "status": "complete",
+                  "created_at": "2026-11-09T10:00:05Z"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "expect": {
+      "searchCalled": false,
+      "contentContains": ["vector databases", "relational FTS"]
+    }
+  }
+]
