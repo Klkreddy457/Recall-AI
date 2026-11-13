@@ -23,7 +23,7 @@ export function getUserTimezone(): string {
   }
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE || '';
+export const API_BASE = import.meta.env.VITE_API_BASE || '';
 
 export async function fetchConversations(search?: string): Promise<Conversation[]> {
   const ownerId = getOwnerId();

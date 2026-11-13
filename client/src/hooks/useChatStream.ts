@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { getOwnerId, getUserTimezone } from '../api/client.js';
+import { getOwnerId, getUserTimezone, API_BASE } from '../api/client.js';
 import type { Message, SourceCard, SearchMetadata } from '../types/index.js';
 
 export interface UseChatStreamProps {
@@ -64,7 +64,7 @@ export function useChatStream({ onConversationUpdated }: UseChatStreamProps = {}
       onUpdateMessage((prev) => [...prev, userMsg, initialAssistantMsg]);
 
       try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch(`${API_BASE}/api/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
