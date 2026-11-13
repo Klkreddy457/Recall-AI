@@ -33,3 +33,4 @@
     "explanation": "FTS matches keywords 'technologies' or 'use', but cannot natively rank or isolate negated architectural decisions without semantic evaluation."
   }
 ]
+
