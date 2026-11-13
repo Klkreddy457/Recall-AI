@@ -39,6 +39,7 @@ export async function runBenchmark(n = 20) {
       llmClient: new OpenAILLMClient({
         apiKey: config.OPENAI_API_KEY,
         model: config.OPENAI_MODEL,
+        baseURL: config.OPENAI_BASE_URL || undefined,
       }),
       searchClient: new TavilySearchClient({
         apiKey: config.TAVILY_API_KEY,
@@ -81,6 +82,7 @@ export async function runBenchmark(n = 20) {
   const recordedTimings: TurnTimings[] = [];
 
   for (let i = 1; i <= n; i++) {
+    process.stdout.write(`Turn ${i}/${n}... `);
     const turnStream = orchestrator.runTurn({
       ownerId: '00000000-0000-0000-0000-000000000001',
       conversationId: `bench-conv-${i}`,
@@ -90,6 +92,9 @@ export async function runBenchmark(n = 20) {
     for await (const ev of turnStream) {
       if (ev.type === 'complete') {
         recordedTimings.push(ev.timings);
+        console.log(`completed in ${ev.timings.totalMs}ms (TTFT: ${ev.timings.timeToFirstTokenMs}ms)`);
+      } else if (ev.type === 'error') {
+        console.log(`error: ${ev.error}`);
       }
     }
   }
@@ -171,7 +176,8 @@ ${
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  runBenchmark(20).catch((err) => {
+  const n = parseInt(process.env.BENCH_N || '10', 10);
+  runBenchmark(n).catch((err) => {
     console.error('Benchmark failed:', err);
     process.exit(1);
   });

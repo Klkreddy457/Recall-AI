@@ -66,6 +66,7 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
       llmClient: new OpenAILLMClient({
         apiKey: cfg.OPENAI_API_KEY,
         model: cfg.OPENAI_MODEL,
+        baseURL: cfg.OPENAI_BASE_URL || undefined,
       }),
       searchClient: new TavilySearchClient({
         apiKey: cfg.TAVILY_API_KEY,

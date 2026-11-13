@@ -241,7 +241,21 @@ flowchart TD
 
 ## 7. Performance Benchmarks
 
-Measured on the Recall AI local engine runner ($N=20$ turns):
+### A. Live Provider Benchmark ($N=10$ turns with real LLM + Tavily Search)
+Measured live via `npm run bench` against real API endpoints:
+
+| Metric | p50 (Median) | p95 (95th Percentile) | Unit |
+|---|---|---|---|
+| **Time-to-First-Event (TTFE)** | 21148.92 | 36281.23 | ms |
+| **Time-to-First-Token (TTFT)** | 21148.93 | 40327.28 | ms |
+| **Memory Retrieval Pipeline** | 0.00 | 0.00 | ms |
+| **Web Search Tool Latency** | 0.00 | 4722.04 | ms |
+| **Total Turn Duration** | 21520.15 | 42094.17 | ms |
+
+*(Note: Live round trips on free tier endpoints include provider rate limit queuing and token streaming latencies).*
+
+### B. Local Engine Orchestration Overhead ($N=20$ turns)
+Measured on the Recall AI local engine runner to isolate framework and orchestration overhead:
 
 | Metric | p50 (Median) | p95 (95th Percentile) | Unit |
 |---|---|---|---|
@@ -250,8 +264,6 @@ Measured on the Recall AI local engine runner ($N=20$ turns):
 | **Memory Retrieval Pipeline** | 0.00 | 0.00 | ms |
 | **Web Search Tool Overhead** | 0.00 | 0.01 | ms |
 | **Total Orchestrator Turn Overhead** | 0.09 | 1.08 | ms |
-
-*(Note: Measured in mocked provider harness reflecting internal orchestration overhead. Live network calls to OpenAI and Tavily add typical external round-trip latencies of 400ms–1500ms).*
 
 ---
 

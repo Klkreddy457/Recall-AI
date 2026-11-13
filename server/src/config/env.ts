@@ -21,6 +21,7 @@ const envSchema = z.object({
     .default(false),
   CLIENT_ORIGIN: z.string().default('http://localhost:5173'),
   OPENAI_API_KEY: z.string().optional().default(''),
+  OPENAI_BASE_URL: z.string().optional().default(''),
   OPENAI_MODEL: z.string().default('gpt-4o-mini'),
   TAVILY_API_KEY: z.string().optional().default(''),
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(60),
