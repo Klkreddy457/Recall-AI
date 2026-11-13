@@ -10,17 +10,46 @@ import { chatRoutes } from './routes/chat.js';
 import { AgentOrchestrator } from './agent/orchestrator.js';
 import { OpenAILLMClient } from './services/llm/openai.js';
 import { TavilySearchClient } from './services/search/tavily.js';
+import { type DataStore, PostgresDataStore, globalInMemoryStore } from './db/store.js';
 
 export interface BuildAppOptions {
   configOverrides?: Partial<EnvConfig>;
-  pool?: Pool;
+  pool?: Pool | null;
+  store?: DataStore;
   orchestrator?: AgentOrchestrator;
   logger?: boolean;
 }
 
 export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInstance> {
   const cfg = loadConfig(opts.configOverrides);
-  const pool = opts.pool ?? getPool(cfg);
+
+  let pool: Pool | null = null;
+  let store: DataStore = opts.store || globalInMemoryStore;
+
+  if (opts.store) {
+    store = opts.store;
+    pool = opts.pool ?? null;
+  } else if (opts.pool !== undefined) {
+    pool = opts.pool;
+    if (pool) {
+      store = new PostgresDataStore(pool);
+    } else {
+      store = globalInMemoryStore;
+    }
+  } else {
+    // Check if default pool can connect
+    try {
+      const candidatePool = getPool(cfg);
+      const client = await candidatePool.connect();
+      client.release();
+      pool = candidatePool;
+      store = new PostgresDataStore(pool);
+    } catch {
+      // PostgreSQL is not running; use in-memory store
+      pool = null;
+      store = globalInMemoryStore;
+    }
+  }
 
   const app = Fastify({
     logger: opts.logger ?? (cfg.NODE_ENV !== 'test'),
@@ -74,11 +103,24 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
     });
 
   // Register Routes
-  await app.register(healthRoutes(pool));
-  await app.register(conversationRoutes(pool));
+  if (pool) {
+    await app.register(healthRoutes(pool));
+  } else {
+    // Health route for in-memory mode
+    app.get('/health', async (_req, reply) => {
+      return reply.status(200).send({
+        status: 'ok',
+        db: 'in-memory (postgres offline)',
+        timestamp: new Date().toISOString(),
+      });
+    });
+  }
+
+  await app.register(conversationRoutes(store));
   await app.register(
     chatRoutes({
-      pool,
+      pool: pool ?? undefined,
+      store,
       orchestrator,
       rateLimitMax: cfg.RATE_LIMIT_MAX,
       rateLimitWindow: cfg.RATE_LIMIT_WINDOW,

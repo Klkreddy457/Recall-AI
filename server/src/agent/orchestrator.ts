@@ -86,14 +86,24 @@ export class AgentOrchestrator {
         memoryMs = memory.timings.totalMs;
       } else if (params.pool) {
         const memStart = performance.now();
-        memory = await retrieve(params.pool, {
-          ownerId: params.ownerId,
-          query: params.query,
-          activeConversationId: params.conversationId,
-          timezone: params.timezone,
-          now: params.now,
-        });
-        memoryMs = Math.round((performance.now() - memStart) * 100) / 100;
+        try {
+          memory = await retrieve(params.pool, {
+            ownerId: params.ownerId,
+            query: params.query,
+            activeConversationId: params.conversationId,
+            timezone: params.timezone,
+            now: params.now,
+          });
+          memoryMs = Math.round((performance.now() - memStart) * 100) / 100;
+        } catch {
+          memory = {
+            recentContext: [],
+            temporal: null,
+            fts: [],
+            memoryEmptySignal: false,
+            timings: { totalMs: 0, recentMs: 0, temporalMs: 0, ftsMs: 0 },
+          };
+        }
       } else {
         memory = {
           recentContext: [],

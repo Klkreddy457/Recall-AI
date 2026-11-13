@@ -26,7 +26,7 @@ export function useChatStream({ onConversationUpdated }: UseChatStreamProps = {}
       query: string,
       conversationId: string | undefined,
       onUpdateMessage: (updater: (prev: Message[]) => Message[]) => void,
-      _onSetCurrentConversationId?: (id: string) => void
+      onSetCurrentConversationId?: (id: string) => void
     ) => {
       setError(null);
       setStatusMessage(null);
@@ -140,6 +140,10 @@ export function useChatStream({ onConversationUpdated }: UseChatStreamProps = {}
               const finalStatus = data.status || 'complete';
               const finalSources = data.sources || receivedSources;
               const timings = data.timings as SearchMetadata;
+
+              if (data.conversationId && onSetCurrentConversationId) {
+                onSetCurrentConversationId(data.conversationId);
+              }
 
               onUpdateMessage((prev) =>
                 prev.map((msg) =>

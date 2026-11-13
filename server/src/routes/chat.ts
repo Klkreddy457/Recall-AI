@@ -4,9 +4,11 @@ import type { Pool } from 'pg';
 import { ownerHeaderSchema, chatRequestSchema } from '../schemas/api.js';
 import { AgentOrchestrator, type TurnTimings } from '../agent/orchestrator.js';
 import type { SourceCard } from '../services/search/types.js';
+import { type DataStore, PostgresDataStore, globalInMemoryStore } from '../db/store.js';
 
 export interface ChatRouteOptions {
-  pool: Pool;
+  pool?: Pool;
+  store?: DataStore;
   orchestrator: AgentOrchestrator;
   rateLimitMax?: number;
   rateLimitWindow?: string;
@@ -14,7 +16,12 @@ export interface ChatRouteOptions {
 
 export const chatRoutes: (opts: ChatRouteOptions) => FastifyPluginAsync =
   (opts) => async (fastify) => {
-    const { pool, orchestrator } = opts;
+    const { orchestrator } = opts;
+    const store: DataStore = opts.store
+      ? opts.store
+      : opts.pool
+      ? new PostgresDataStore(opts.pool)
+      : globalInMemoryStore;
 
     fastify.post(
       '/api/chat',
@@ -54,48 +61,39 @@ export const chatRoutes: (opts: ChatRouteOptions) => FastifyPluginAsync =
 
         // Step 3: Conversation Setup & Ownership Verification
         let needsAutoTitle = false;
-        let dbAvailable = true;
 
         try {
           if (conversationId) {
-            const check = await pool.query(
-              `SELECT id, title FROM conversations WHERE id = $1 AND owner_id = $2`,
-              [conversationId, ownerId]
-            );
-            if (check.rowCount === 0) {
+            const existing = await store.getConversation(conversationId, ownerId);
+            if (!existing) {
               return reply.status(404).send({
                 statusCode: 404,
                 error: 'Not Found',
                 message: 'Conversation not found or access denied',
               });
             }
-            if (!check.rows[0]?.title || check.rows[0].title === 'New Conversation') {
+            if (!existing.title || existing.title === 'New Conversation') {
               needsAutoTitle = true;
             }
           } else {
             // First turn: auto-title from the first prompt excerpt
             const generatedTitle =
               query.length > 50 ? query.slice(0, 50).trim() + '...' : query.trim();
-            const created = await pool.query(
-              `INSERT INTO conversations (owner_id, title)
-               VALUES ($1, $2)
-               RETURNING id, title`,
-              [ownerId, generatedTitle]
-            );
-            conversationId = created.rows[0]?.id;
+            const created = await store.createConversation(ownerId, generatedTitle);
+            conversationId = created.id;
           }
 
           // Step 4: Persist User Message at Turn Start
           if (conversationId) {
-            await pool.query(
-              `INSERT INTO messages (id, conversation_id, role, content, status, created_at)
-               VALUES ($1, $2, 'user', $3, 'complete', NOW())`,
-              [randomUUID(), conversationId, query]
-            );
+            await store.insertMessage({
+              id: randomUUID(),
+              conversation_id: conversationId,
+              role: 'user',
+              content: query,
+              status: 'complete',
+            });
           }
-        } catch {
-          // If DB is offline, continue turn processing in memory so mock/smoke tests still stream
-          dbAvailable = false;
+        } catch (err) {
           if (!conversationId) {
             conversationId = randomUUID();
           }
@@ -138,7 +136,7 @@ export const chatRoutes: (opts: ChatRouteOptions) => FastifyPluginAsync =
             query,
             timezone,
             signal: abortController.signal,
-            pool: dbAvailable ? pool : undefined,
+            pool: opts.pool,
           });
 
           for await (const event of turnStream) {
@@ -154,7 +152,9 @@ export const chatRoutes: (opts: ChatRouteOptions) => FastifyPluginAsync =
               turnStatus = 'error';
             }
 
-            const sseChunk = `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`;
+            const payload =
+              event.type === 'complete' ? { ...event, conversationId } : event;
+            const sseChunk = `event: ${event.type}\ndata: ${JSON.stringify(payload)}\n\n`;
             reply.raw.write(sseChunk);
           }
         } catch (err) {
@@ -175,56 +175,36 @@ export const chatRoutes: (opts: ChatRouteOptions) => FastifyPluginAsync =
           };
           reply.raw.write(`event: ${errorPayload.type}\ndata: ${JSON.stringify(errorPayload)}\n\n`);
         } finally {
-          // Step 6: Persist Assistant Message in a Transaction at Turn End
-          if (dbAvailable && conversationId) {
+          // Step 6: Persist Assistant Message at Turn End
+          if (conversationId) {
             try {
-              const client = await pool.connect();
-              try {
-                await client.query('BEGIN');
-
-                if (needsAutoTitle) {
-                  const autoTitle =
-                    query.length > 50 ? query.slice(0, 50).trim() + '...' : query.trim();
-                  await client.query(
-                    `UPDATE conversations SET title = $1, updated_at = NOW() WHERE id = $2`,
-                    [autoTitle, conversationId]
-                  );
-                } else {
-                  await client.query(
-                    `UPDATE conversations SET updated_at = NOW() WHERE id = $1`,
-                    [conversationId]
-                  );
-                }
-
-                const searchMetadata = {
-                  total_ms: lastTimings.totalMs,
-                  time_to_first_event: lastTimings.timeToFirstEventMs,
-                  time_to_first_token: lastTimings.timeToFirstTokenMs,
-                  memory_ms: lastTimings.memoryMs,
-                  search_ms: lastTimings.searchMs,
-                };
-
-                await client.query(
-                  `INSERT INTO messages (id, conversation_id, role, content, status, created_at, sources_json, search_metadata)
-                   VALUES ($1, $2, 'assistant', $3, $4, NOW(), $5, $6)`,
-                  [
-                    randomUUID(),
-                    conversationId,
-                    fullAssistantContent,
-                    turnStatus,
-                    lastSources.length > 0 ? JSON.stringify(lastSources) : null,
-                    JSON.stringify(searchMetadata),
-                  ]
-                );
-
-                await client.query('COMMIT');
-              } catch {
-                await client.query('ROLLBACK');
-              } finally {
-                client.release();
+              if (needsAutoTitle) {
+                const autoTitle =
+                  query.length > 50 ? query.slice(0, 50).trim() + '...' : query.trim();
+                await store.updateConversation(conversationId, { title: autoTitle });
+              } else {
+                await store.updateConversation(conversationId, {});
               }
+
+              const searchMetadata = {
+                total_ms: lastTimings.totalMs,
+                time_to_first_event: lastTimings.timeToFirstEventMs,
+                time_to_first_token: lastTimings.timeToFirstTokenMs,
+                memory_ms: lastTimings.memoryMs,
+                search_ms: lastTimings.searchMs,
+              };
+
+              await store.insertMessage({
+                id: randomUUID(),
+                conversation_id: conversationId,
+                role: 'assistant',
+                content: fullAssistantContent,
+                status: turnStatus,
+                sources_json: lastSources.length > 0 ? lastSources : null,
+                search_metadata: searchMetadata,
+              });
             } catch {
-              // Ignore db release error
+              // Ignore store error
             }
           }
 
@@ -234,4 +214,3 @@ export const chatRoutes: (opts: ChatRouteOptions) => FastifyPluginAsync =
       }
     );
   };
-
