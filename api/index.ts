@@ -1,10 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'http';
-import { buildApp } from '../server/src/app.js';
 
 let appInstance: any = null;
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   if (!appInstance) {
+    const { buildApp } = await import('../server/src/app.js');
     appInstance = await buildApp();
     await appInstance.ready();
   }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Recall AI: A chat agent that answers fast, gets facts right, and remembers what the user asked and when.",
   "private": true,
+  "type": "module",
   "workspaces": [
     "server",
     "client"
