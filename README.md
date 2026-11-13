@@ -222,3 +222,4 @@ Recall AI can be deployed on any container platform (Railway, Render, AWS ECS, F
 | [Light Mode]            | [ Ask anything or recall past discussions...   ] [Send] |
 +---------------------------------------------------------------------------------+
 ```
+

@@ -281,3 +281,4 @@ Measured on the Recall AI local engine runner ($N=20$ turns):
 - [ ] **Proactive Recall:** Background notification agent that observes external temporal events or reminders and proactively injects past conversational context.
 - [ ] **Background Categorical Summaries:** Lazy, evidence-gated summarization workers if categorical cross-conversation queries fail in production.
 - [ ] **Authenticated Identity Provider:** JWT or session-based authentication replacing header-based owner IDs.
+
