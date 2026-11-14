@@ -11,7 +11,7 @@ export function createPool(cfg: EnvConfig = defaultConfig): Pool {
     connectionTimeoutMillis: 5000,
   };
 
-  if (cfg.DATABASE_SSL) {
+  if (cfg.DATABASE_SSL || cfg.DATABASE_URL.includes('sslmode=') || cfg.DATABASE_URL.includes('neon.tech')) {
     poolConfig.ssl = { rejectUnauthorized: false };
   }
 

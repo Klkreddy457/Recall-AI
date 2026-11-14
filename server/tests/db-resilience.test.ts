@@ -5,17 +5,14 @@ import { PostgresDataStore } from '../src/db/store.js';
 
 describe('Database Disconnection & Resilience', () => {
   it('throws error on production startup when DATABASE_URL cannot connect', async () => {
-    const mockFailingPool = {
-      connect: vi.fn().mockRejectedValue(new Error('Connection terminated unexpectedly')),
-    } as unknown as Pool;
-
     await expect(
       buildApp({
-        configOverrides: { NODE_ENV: 'production' },
-        pool: undefined,
-        // Mock getPool to return failing pool
+        configOverrides: {
+          NODE_ENV: 'production',
+          DATABASE_URL: 'postgresql://postgres:wrong@127.0.0.1:54329/nonexistent',
+        },
       })
-    ).rejects.toThrow();
+    ).rejects.toThrow(/Production database connection failed/);
   });
 
   it('PostgresDataStore in production throws on query failure without fallback', async () => {
@@ -83,3 +80,4 @@ describe('Database Disconnection & Resilience', () => {
     expect(body.connected).toBe(false);
   });
 });
+
