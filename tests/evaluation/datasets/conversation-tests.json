@@ -1,0 +1,244 @@
+[
+  {
+    "id": "conv-01",
+    "title": "Basic Question",
+    "description": "Fundamental question defining Agentic AI",
+    "inputConversation": [
+      { "role": "user", "content": "What is Agentic AI?" }
+    ],
+    "expectedBehavior": "Defines agentic AI as autonomous systems capable of planning, goal pursuit, and tool usage.",
+    "expectedSubstrings": ["autonomous", "goal", "tool"]
+  },
+  {
+    "id": "conv-02",
+    "title": "Immediate Follow-Up",
+    "description": "Follow-up question without restating the subject",
+    "inputConversation": [
+      { "role": "user", "content": "What is Agentic AI?" },
+      { "role": "assistant", "content": "Agentic AI refers to autonomous systems capable of taking actions to achieve specified goals." },
+      { "role": "user", "content": "What are its applications?" }
+    ],
+    "expectedBehavior": "Answers with agentic AI applications (software development, research, customer operations) resolving 'its' to Agentic AI.",
+    "expectedSubstrings": ["applications", "agent"]
+  },
+  {
+    "id": "conv-03",
+    "title": "Pronoun Resolution",
+    "description": "Resolving 'it' to the subject of the previous turns",
+    "inputConversation": [
+      { "role": "user", "content": "Tell me about Agentic AI." },
+      { "role": "assistant", "content": "Agentic AI is an autonomous computing paradigm." },
+      { "role": "user", "content": "Which companies are developing it?" }
+    ],
+    "expectedBehavior": "Resolves 'it' to Agentic AI and names relevant companies (e.g. OpenAI, Anthropic, Google DeepMind, Microsoft).",
+    "expectedSubstrings": ["OpenAI", "Anthropic", "Google", "Microsoft"]
+  },
+  {
+    "id": "conv-04",
+    "title": "Contextual Comparison",
+    "description": "Comparing the first two entities listed in prior assistant turn",
+    "inputConversation": [
+      { "role": "user", "content": "Name three top vector databases." },
+      { "role": "assistant", "content": "Three top vector databases are: 1. Pinecone, 2. Qdrant, and 3. Milvus." },
+      { "role": "user", "content": "Compare the first two." }
+    ],
+    "expectedBehavior": "Compares Pinecone (managed SaaS) and Qdrant (open-source Rust engine) specifically.",
+    "expectedSubstrings": ["Pinecone", "Qdrant"]
+  },
+  {
+    "id": "conv-05",
+    "title": "Contextual Reference (The Second One)",
+    "description": "Selecting the second item from an enumerated list",
+    "inputConversation": [
+      { "role": "user", "content": "What are the key components of an LLM agent?" },
+      { "role": "assistant", "content": "The key components are: 1. Planning, 2. Memory, and 3. Tools." },
+      { "role": "user", "content": "Tell me more about the second one." }
+    ],
+    "expectedBehavior": "Explains Memory (short-term, working, and persistent long-term storage) without confusion.",
+    "expectedSubstrings": ["memory", "short-term", "context"]
+  },
+  {
+    "id": "conv-06",
+    "title": "Topic Transition",
+    "description": "Abrupt shift to a completely different technical domain",
+    "inputConversation": [
+      { "role": "user", "content": "Tell me about Agentic AI." },
+      { "role": "assistant", "content": "Agentic AI focuses on autonomous goal pursuit." },
+      { "role": "user", "content": "Now explain PostgreSQL." }
+    ],
+    "expectedBehavior": "Explains PostgreSQL (relational database, ACID, SQL) without bleeding previous AI agent definitions.",
+    "expectedSubstrings": ["relational", "database", "SQL"]
+  },
+  {
+    "id": "conv-07",
+    "title": "Return to Previous Topic",
+    "description": "Returning to a prior subject after an intermediate diversion",
+    "inputConversation": [
+      { "role": "user", "content": "What is Agentic AI?" },
+      { "role": "assistant", "content": "Agentic AI refers to autonomous goal-directed systems." },
+      { "role": "user", "content": "Now explain PostgreSQL." },
+      { "role": "assistant", "content": "PostgreSQL is an open-source relational database system." },
+      { "role": "user", "content": "Coming back to Agentic AI, what are its limitations?" }
+    ],
+    "expectedBehavior": "Discusses limitations of Agentic AI (hallucinations, infinite loops, high cost, predictability) rather than PostgreSQL limitations.",
+    "expectedSubstrings": ["limitations", "hallucination", "cost"]
+  },
+  {
+    "id": "conv-08",
+    "title": "Multi-Turn Reasoning",
+    "description": "Step-by-step query refinement, comparison, and final synthesis",
+    "inputConversation": [
+      { "role": "user", "content": "What is Fastify?" },
+      { "role": "assistant", "content": "Fastify is a fast and low-overhead web framework for Node.js." },
+      { "role": "user", "content": "How does it compare to Express in throughput?" },
+      { "role": "assistant", "content": "Fastify offers substantially higher throughput than Express due to its custom router and fast-json-stringify schema serialization." },
+      { "role": "user", "content": "Summarize the architectural reasons for that difference." }
+    ],
+    "expectedBehavior": "Synthesizes the architectural reasons (radix tree routing, pre-compiled JSON schemas, minimal prototype pollution).",
+    "expectedSubstrings": ["routing", "schema", "serialization"]
+  },
+  {
+    "id": "conv-09",
+    "title": "Ambiguous Reference Handling",
+    "description": "User provides an unresolved demonstrative pronoun",
+    "inputConversation": [
+      { "role": "user", "content": "What about that one?" }
+    ],
+    "expectedBehavior": "Asks ONE short clarifying question instead of hallucinating a topic, adhering to Core Directive 7.",
+    "expectedSubstrings": ["which", "clarify", "mean", "could you"]
+  },
+  {
+    "id": "conv-10",
+    "title": "Missing Context / Unmentioned Topic",
+    "description": "User asks about an entity never mentioned in conversation",
+    "inputConversation": [
+      { "role": "user", "content": "Why did we decide against using Redis?" }
+    ],
+    "expectedBehavior": "States that Redis was not previously discussed in this conversation.",
+    "expectedSubstrings": ["not discussed", "no record", "not mentioned", "not found"]
+  },
+  {
+    "id": "conv-11",
+    "title": "Long Conversation Context Retention",
+    "description": "Maintains key project constraints after 8 conversational turns",
+    "inputConversation": [
+      { "role": "user", "content": "My primary database constraint is zero vector databases." },
+      { "role": "assistant", "content": "Understood. No vector databases will be used." },
+      { "role": "user", "content": "Tell me about TypeScript strict mode." },
+      { "role": "assistant", "content": "Strict mode enables all strict type checking options." },
+      { "role": "user", "content": "What port should Fastify run on?" },
+      { "role": "assistant", "content": "Fastify typically runs on port 3000 or 3001." },
+      { "role": "user", "content": "What was my initial database constraint?" }
+    ],
+    "expectedBehavior": "Accurately recalls the zero vector databases constraint.",
+    "expectedSubstrings": ["zero vector", "no vector database"]
+  },
+  {
+    "id": "conv-12",
+    "title": "Repeated Question Consistency",
+    "description": "Asking identical query twice yields logically consistent facts",
+    "inputConversation": [
+      { "role": "user", "content": "What does ACID stand for?" },
+      { "role": "assistant", "content": "ACID stands for Atomicity, Consistency, Isolation, and Durability." },
+      { "role": "user", "content": "What does ACID stand for?" }
+    ],
+    "expectedBehavior": "Provides the identical, correct expansion of ACID.",
+    "expectedSubstrings": ["Atomicity", "Consistency", "Isolation", "Durability"]
+  },
+  {
+    "id": "conv-13",
+    "title": "Conversation Switching Isolation",
+    "description": "Switches to an isolated conversation without cross-talk leakage",
+    "inputConversation": [
+      { "role": "user", "content": "What is the capital of Italy?" }
+    ],
+    "expectedBehavior": "Answers Rome without any leakage from previous conversation threads.",
+    "expectedSubstrings": ["Rome"]
+  },
+  {
+    "id": "conv-14",
+    "title": "Follow-Up After Reload State",
+    "description": "Continuing from an active loaded conversation",
+    "inputConversation": [
+      { "role": "user", "content": "I am designing a cache with TTL." },
+      { "role": "assistant", "content": "A TTL cache expires entries after a set duration." },
+      { "role": "user", "content": "What eviction policy should I pair with it?" }
+    ],
+    "expectedBehavior": "Recommends LRU (Least Recently Used) or LFU in the context of the TTL cache.",
+    "expectedSubstrings": ["LRU", "least recently used"]
+  },
+  {
+    "id": "conv-15",
+    "title": "Summary Request",
+    "description": "User requests a concise summary of the entire session",
+    "inputConversation": [
+      { "role": "user", "content": "We are building Recall AI using React, Fastify, and PostgreSQL." },
+      { "role": "assistant", "content": "Got it. That is a solid full-stack TypeScript stack." },
+      { "role": "user", "content": "Summarize what we discussed." }
+    ],
+    "expectedBehavior": "Summarizes Recall AI, React, Fastify, and PostgreSQL.",
+    "expectedSubstrings": ["Recall AI", "React", "Fastify", "PostgreSQL"]
+  },
+  {
+    "id": "conv-16",
+    "title": "Reference Resolution Across Multiple Turns",
+    "description": "Referencing an entity introduced 4 turns ago",
+    "inputConversation": [
+      { "role": "user", "content": "Let's track a product named ChronoDesk." },
+      { "role": "assistant", "content": "Tracking ChronoDesk." },
+      { "role": "user", "content": "What are its main competitors?" },
+      { "role": "assistant", "content": "Competitors include Linear, Asana, and Jira." },
+      { "role": "user", "content": "How does ChronoDesk differentiate itself?" }
+    ],
+    "expectedBehavior": "Synthesizes differentiation for ChronoDesk relative to Linear, Asana, and Jira.",
+    "expectedSubstrings": ["ChronoDesk"]
+  },
+  {
+    "id": "conv-17",
+    "title": "Context Retention After Rapid Topic Changes",
+    "description": "Recovers subject after interleaved topic changes",
+    "inputConversation": [
+      { "role": "user", "content": "Plan an architecture for Recall AI." },
+      { "role": "assistant", "content": "We will use Fastify with SSE and PostgreSQL." },
+      { "role": "user", "content": "Quick question: what is 15 * 12?" },
+      { "role": "assistant", "content": "15 * 12 is 180." },
+      { "role": "user", "content": "Back to the architecture, how does the frontend stream messages?" }
+    ],
+    "expectedBehavior": "Explains SSE (Server-Sent Events) streaming with fetchEventSource or EventSource.",
+    "expectedSubstrings": ["SSE", "Server-Sent Events"]
+  },
+  {
+    "id": "conv-18",
+    "title": "Multiple Entities with Similar Names",
+    "description": "Differentiating between Next.js, Nuxt.js, and NestJS",
+    "inputConversation": [
+      { "role": "user", "content": "I am confused between Next.js, Nuxt.js, and NestJS." },
+      { "role": "assistant", "content": "Next.js is for React, Nuxt.js is for Vue, and NestJS is a Node.js backend framework." },
+      { "role": "user", "content": "Which one is for Vue?" }
+    ],
+    "expectedBehavior": "Identifies Nuxt.js specifically without confusing it with Next.js or NestJS.",
+    "expectedSubstrings": ["Nuxt"]
+  },
+  {
+    "id": "conv-19",
+    "title": "Follow-Up Using Incomplete Sentences",
+    "description": "Elliptical user question: 'And PostgreSQL?'",
+    "inputConversation": [
+      { "role": "user", "content": "Does SQLite support concurrency?" },
+      { "role": "assistant", "content": "SQLite supports one writer at a time, limiting high concurrency." },
+      { "role": "user", "content": "And PostgreSQL?" }
+    ],
+    "expectedBehavior": "Understands the elliptical question as asking about PostgreSQL's concurrency (MVCC, multiple simultaneous writers and readers).",
+    "expectedSubstrings": ["MVCC", "concurrency", "concurrent"]
+  },
+  {
+    "id": "conv-20",
+    "title": "Contradictory User-Provided Context",
+    "description": "User asserts an untrue premise: 'Since Python is statically typed...'",
+    "inputConversation": [
+      { "role": "user", "content": "Since Python is statically typed, why do we need type hints?" }
+    ],
+    "expectedBehavior": "Politely corrects the contradiction, explaining that Python is dynamically typed.",
+    "expectedSubstrings": ["dynamically typed", "dynamic"]
+  }
+]

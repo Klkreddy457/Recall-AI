@@ -1,0 +1,105 @@
+[
+  {
+    "id": "mem-01",
+    "title": "Exact Date Retrieval (October 10)",
+    "query": "What did I ask on October 10?",
+    "targetDate": "2026-10-10",
+    "expectedRelevantIds": ["msg-a-1", "msg-a-3"],
+    "expectedContentSubstrings": ["Retrieval-Augmented Generation", "databases support vector search"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-02",
+    "title": "First Question Identification",
+    "query": "What was my first question?",
+    "expectedRelevantIds": ["msg-a-1"],
+    "expectedContentSubstrings": ["Retrieval-Augmented Generation"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-03",
+    "title": "Timestamp Retrieval (When did I ask about RAG?)",
+    "query": "When did I ask about RAG?",
+    "expectedRelevantIds": ["msg-a-1"],
+    "expectedContentSubstrings": ["October 10", "2026"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-04",
+    "title": "Entity Extraction Across Memory (Databases discussed)",
+    "query": "Which databases did we discuss?",
+    "expectedRelevantIds": ["msg-a-3", "msg-a-4", "msg-b-1", "msg-b-2"],
+    "expectedContentSubstrings": ["PostgreSQL", "pgvector", "Qdrant"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-05",
+    "title": "Date Comparison Retrieval (October 11)",
+    "query": "What did we compare on October 11?",
+    "targetDate": "2026-10-11",
+    "expectedRelevantIds": ["msg-b-1", "msg-b-2"],
+    "expectedContentSubstrings": ["PostgreSQL FTS", "vector search"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-06",
+    "title": "Topic Fact Retrieval (What did you tell me about PostgreSQL?)",
+    "query": "What did you tell me about PostgreSQL?",
+    "expectedRelevantIds": ["msg-a-4", "msg-b-2"],
+    "expectedContentSubstrings": ["tsvector", "lexical"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-07",
+    "title": "Chronological Precedence (Discussed before Agentic AI)",
+    "query": "What did we discuss before Agentic AI?",
+    "expectedRelevantIds": ["msg-b-1", "msg-b-2"],
+    "expectedContentSubstrings": ["PostgreSQL FTS", "vector search"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-08",
+    "title": "Specific Topic Date Verification (October 12)",
+    "query": "Did we discuss anything on October 12?",
+    "targetDate": "2026-10-12",
+    "expectedRelevantIds": ["msg-c-1"],
+    "expectedContentSubstrings": ["Agentic AI"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-09",
+    "title": "Cross-Conversation Topic Isolation (pgvector)",
+    "query": "In which conversation did I ask about pgvector?",
+    "expectedRelevantIds": ["msg-a-3", "msg-a-4"],
+    "expectedContentSubstrings": ["RAG and Vector Databases"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-10",
+    "title": "Unsupported Memory Topic (Kubernetes)",
+    "query": "What did I ask about Kubernetes before?",
+    "expectedRelevantIds": [],
+    "expectedContentSubstrings": ["no matching records", "could not find"],
+    "forbiddenContentSubstrings": ["You asked about pod deployment", "cluster configuration"],
+    "requiresEmptySignal": true
+  },
+  {
+    "id": "mem-11",
+    "title": "Multi-Tenant Owner Isolation (Secret Token of User 2)",
+    "query": "What is my secret token ALPHA-OMEGA that I mentioned earlier?",
+    "ownerId": "00000000-0000-0000-0000-000000000001",
+    "expectedRelevantIds": [],
+    "expectedContentSubstrings": ["no matching records", "could not find"],
+    "forbiddenContentSubstrings": ["ALPHA-OMEGA-999", "$12M"],
+    "requiresEmptySignal": true
+  },
+  {
+    "id": "mem-12",
+    "title": "Timezone Conversion Boundary (New York vs Tokyo)",
+    "query": "What was discussed in the morning of October 10?",
+    "timezone": "America/New_York",
+    "expectedRelevantIds": ["msg-a-1", "msg-a-3"],
+    "expectedContentSubstrings": ["Retrieval-Augmented Generation"],
+    "requiresEmptySignal": false
+  }
+]

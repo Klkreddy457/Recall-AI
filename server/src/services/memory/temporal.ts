@@ -126,6 +126,23 @@ export function parseTemporalDate(
     return { start, end, text: match.text };
   }
 
+  // Special handling for time-of-day phrases: morning, afternoon, evening
+  if (matchedTextLower.includes('morning')) {
+    const start = localToUtc(sYear, sMonth, sDay, 6, 0, 0, timeZone);
+    const end = localToUtc(sYear, sMonth, sDay, 12, 0, 0, timeZone);
+    return { start, end, text: match.text };
+  }
+  if (matchedTextLower.includes('afternoon')) {
+    const start = localToUtc(sYear, sMonth, sDay, 12, 0, 0, timeZone);
+    const end = localToUtc(sYear, sMonth, sDay, 18, 0, 0, timeZone);
+    return { start, end, text: match.text };
+  }
+  if (matchedTextLower.includes('evening')) {
+    const start = localToUtc(sYear, sMonth, sDay, 18, 0, 0, timeZone);
+    const end = localToUtc(sYear, sMonth, sDay, 23, 59, 59, timeZone);
+    return { start, end, text: match.text };
+  }
+
   // Exact time specified
   const sHour = s.get('hour') ?? 0;
   const sMin = s.get('minute') ?? 0;

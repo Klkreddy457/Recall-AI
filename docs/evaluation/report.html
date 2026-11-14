@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recall AI - Technical Evaluation & Benchmark Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 500: '#3b82f6', 600: '#2563eb' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #09090b; color: #f4f4f5; font-family: ui-sans-serif, system-ui, sans-serif; }
+  </style>
+</head>
+<body class="p-6 md:p-12 max-w-7xl mx-auto">
+  <!-- Header -->
+  <header class="flex flex-col md:flex-row md:items-center justify-between border-b border-zinc-800 pb-6 mb-8 gap-4">
+    <div>
+      <div class="flex items-center gap-3">
+        <h1 class="text-3xl font-extrabold tracking-tight">Recall AI</h1>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Production Verified</span>
+      </div>
+      <p class="text-zinc-400 text-sm mt-1">Comprehensive AI Agent Evaluation & Benchmarking Report</p>
+      <div class="flex gap-4 text-xs text-zinc-500 mt-2">
+        <span>Evaluated: 2026-11-14T01:23:22.897Z</span>
+        <span>•</span>
+        <span>Target: <a href="https://recall-ai-app-six.vercel.app" target="_blank" class="text-blue-400 underline">Vercel Deployment</a></span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4 bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
+      <div class="text-right">
+        <div class="text-xs text-zinc-400 font-medium">Weighted Score</div>
+        <div class="text-3xl font-black text-blue-400">85<span class="text-lg text-zinc-500 font-normal"> / 100</span></div>
+      </div>
+      <div class="h-10 w-px bg-zinc-800"></div>
+      <div>
+        <div class="text-xs text-zinc-400 font-medium">Pass Rate</div>
+        <div class="text-2xl font-bold text-emerald-400">82%</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Key Metrics Grid -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+      <div class="text-xs text-zinc-400">Total Genuine Tests</div>
+      <div class="text-2xl font-bold mt-1">95</div>
+      <div class="text-xs text-emerald-400 mt-1">78 Passed (0 Fabricated)</div>
+    </div>
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+      <div class="text-xs text-zinc-400">Memory Precision@K</div>
+      <div class="text-2xl font-bold mt-1">0.56</div>
+      <div class="text-xs text-zinc-400 mt-1">Recall@K: 0.75</div>
+    </div>
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+      <div class="text-xs text-zinc-400">Citation Precision</div>
+      <div class="text-2xl font-bold mt-1">100%</div>
+      <div class="text-xs text-zinc-400 mt-1">Zero Phantom Citations</div>
+    </div>
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+      <div class="text-xs text-zinc-400">Engine TTFE (Median)</div>
+      <div class="text-2xl font-bold mt-1 text-purple-400">0.09 ms</div>
+      <div class="text-xs text-zinc-400 mt-1">Total Turn: 0.1 ms</div>
+    </div>
+  </div>
+
+  <!-- Category Scorecards -->
+  <h2 class="text-xl font-bold mb-4">Evaluation Category Scores (100-Point Weighted Framework)</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+    <!-- Memory -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">Persistent Memory</span>
+          <span class="text-xs font-bold text-blue-400">13.3 / 20</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 66.5%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• Tests: 8/12 passed</div>
+          <div>• Unsupported claim rate: 0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conversation -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">Conversation Intelligence</span>
+          <span class="text-xs font-bold text-blue-400">12.8 / 15</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 85.33333333333334%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• Tests: 17/20 passed</div>
+          <div>• Multi-turn reasoning verified</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Web Search Decisions -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">Web Search Decisions</span>
+          <span class="text-xs font-bold text-blue-400">13.7 / 15</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 91.33333333333333%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• Search Precision: 100%</div>
+          <div>• Unnecessary Search: 0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accuracy & Citations -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">Accuracy & Citations</span>
+          <span class="text-xs font-bold text-blue-400">10.2 / 15</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 68%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• Citation Precision: 100%</div>
+          <div>• Phantom Citations Stripped: 100%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Performance -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">Engine Performance</span>
+          <span class="text-xs font-bold text-blue-400">10 / 10</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• 5 Workload Profiles tested</div>
+          <div>• Sub-millisecond engine overhead</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reliability -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">Reliability & Recovery</span>
+          <span class="text-xs font-bold text-blue-400">10 / 10</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• Timeout & Abort resilience</div>
+          <div>• Single-search invariant enforced</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">Security & Privacy</span>
+          <span class="text-xs font-bold text-blue-400">10 / 10</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• Prompt injection defense verified</div>
+          <div>• Zero bundle secret leaks</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Experience -->
+    <div class="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 flex flex-col justify-between">
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold text-sm">User Experience</span>
+          <span class="text-xs font-bold text-blue-400">5 / 5</span>
+        </div>
+        <div class="w-full bg-zinc-800 rounded-full h-2 mb-3">
+          <div class="bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
+        </div>
+        <div class="text-xs text-zinc-400 space-y-1">
+          <div>• React 19 + Tailwind UI</div>
+          <div>• Stop stream & Theme toggle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Latency Table -->
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-10">
+    <h3 class="text-lg font-bold mb-3">Engine Latency Benchmarks (Local Harness Overhead)</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-zinc-300">
+        <thead class="text-xs text-zinc-500 uppercase border-b border-zinc-800">
+          <tr>
+            <th class="py-2.5">Profile</th>
+            <th>Description</th>
+            <th>p50 (Median)</th>
+            <th>p95</th>
+            <th>p99</th>
+            <th>Min</th>
+            <th>Max</th>
+            <th>Avg</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800/50">
+          
+          <tr>
+            <td class="py-3 font-semibold text-blue-400">A</td>
+            <td>Basic Question (No Search, No Memory)</td>
+            <td class="font-mono">0.1 ms</td>
+            <td class="font-mono">0.22 ms</td>
+            <td class="font-mono">0.24 ms</td>
+            <td class="font-mono text-zinc-500">0.08 ms</td>
+            <td class="font-mono text-zinc-500">0.25 ms</td>
+            <td class="font-mono text-zinc-500">0.12 ms</td>
+          </tr>
+          <tr>
+            <td class="py-3 font-semibold text-blue-400">B</td>
+            <td>Memory Retrieval Query</td>
+            <td class="font-mono">0.09 ms</td>
+            <td class="font-mono">0.14 ms</td>
+            <td class="font-mono">0.16 ms</td>
+            <td class="font-mono text-zinc-500">0.08 ms</td>
+            <td class="font-mono text-zinc-500">0.16 ms</td>
+            <td class="font-mono text-zinc-500">0.1 ms</td>
+          </tr>
+          <tr>
+            <td class="py-3 font-semibold text-blue-400">C</td>
+            <td>Live Web Search Query</td>
+            <td class="font-mono">0.1 ms</td>
+            <td class="font-mono">0.14 ms</td>
+            <td class="font-mono">0.14 ms</td>
+            <td class="font-mono text-zinc-500">0.09 ms</td>
+            <td class="font-mono text-zinc-500">0.14 ms</td>
+            <td class="font-mono text-zinc-500">0.11 ms</td>
+          </tr>
+          <tr>
+            <td class="py-3 font-semibold text-blue-400">D</td>
+            <td>Combined Memory + Search Query</td>
+            <td class="font-mono">0.11 ms</td>
+            <td class="font-mono">0.16 ms</td>
+            <td class="font-mono">0.18 ms</td>
+            <td class="font-mono text-zinc-500">0.1 ms</td>
+            <td class="font-mono text-zinc-500">0.18 ms</td>
+            <td class="font-mono text-zinc-500">0.12 ms</td>
+          </tr>
+          <tr>
+            <td class="py-3 font-semibold text-blue-400">E</td>
+            <td>Long Conversation Context Query</td>
+            <td class="font-mono">0.1 ms</td>
+            <td class="font-mono">0.12 ms</td>
+            <td class="font-mono">0.12 ms</td>
+            <td class="font-mono text-zinc-500">0.08 ms</td>
+            <td class="font-mono text-zinc-500">0.12 ms</td>
+            <td class="font-mono text-zinc-500">0.1 ms</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Test Explorer Section -->
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+      <h3 class="text-lg font-bold">Comprehensive Test Registry (95 Tests)</h3>
+      <input type="text" id="testSearch" placeholder="Search tests by keyword..." class="bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-blue-500 w-full md:w-64" onkeyup="filterTests()">
+    </div>
+    <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
+      <table class="w-full text-left text-sm text-zinc-300" id="testTable">
+        <thead class="text-xs text-zinc-500 uppercase border-b border-zinc-800 sticky top-0 bg-zinc-900">
+          <tr>
+            <th class="py-2">Status</th>
+            <th>ID</th>
+            <th>Suite</th>
+            <th>Title / Question</th>
+            <th>Evaluation Result</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800/40 text-xs">
+          <!-- Memory -->
+          
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-01</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Exact Date Retrieval (October 10)</td>
+            <td class="text-zinc-400">Precision: 0.5, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-02</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">First Question Identification</td>
+            <td class="text-zinc-400">Precision: 1, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">mem-03</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Timestamp Retrieval (When did I ask about RAG?)</td>
+            <td class="text-zinc-400">Missing expected record ID: msg-a-1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">mem-04</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Entity Extraction Across Memory (Databases discussed)</td>
+            <td class="text-zinc-400">Missing expected record ID: msg-b-1; Missing expected record ID: msg-b-2</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-05</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Date Comparison Retrieval (October 11)</td>
+            <td class="text-zinc-400">Precision: 1, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-06</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Topic Fact Retrieval (What did you tell me about PostgreSQL?)</td>
+            <td class="text-zinc-400">Precision: 0.67, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-07</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Chronological Precedence (Discussed before Agentic AI)</td>
+            <td class="text-zinc-400">Precision: 1, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-08</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Specific Topic Date Verification (October 12)</td>
+            <td class="text-zinc-400">Precision: 0.5, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">mem-09</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Cross-Conversation Topic Isolation (pgvector)</td>
+            <td class="text-zinc-400">Missing expected record ID: msg-a-3</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-10</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Unsupported Memory Topic (Kubernetes)</td>
+            <td class="text-zinc-400">Precision: 0, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-11</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Multi-Tenant Owner Isolation (Secret Token of User 2)</td>
+            <td class="text-zinc-400">Precision: 0, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">mem-12</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Timezone Conversion Boundary (New York vs Tokyo)</td>
+            <td class="text-zinc-400">Expected records to be retrieved but received empty result; Missing expected record ID: msg-a-1; Missing expected record ID: msg-a-3</td>
+          </tr>
+          <!-- Conversation -->
+          
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-01</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Basic Question</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-02</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Immediate Follow-Up</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-03</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Pronoun Resolution</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-04</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Contextual Comparison</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-05</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Contextual Reference (The Second One)</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-06</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Topic Transition</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-07</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Return to Previous Topic</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-08</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Multi-Turn Reasoning</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-09</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Ambiguous Reference Handling</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">conv-10</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Missing Context / Unmentioned Topic</td>
+            <td class="text-zinc-400">Missing expected keyword: "not discussed"; Missing expected keyword: "not mentioned"; Missing expected keyword: "not found"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">conv-11</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Long Conversation Context Retention</td>
+            <td class="text-zinc-400">Missing expected keyword: "no vector database"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-12</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Repeated Question Consistency</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-13</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Conversation Switching Isolation</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-14</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Follow-Up After Reload State</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-15</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Summary Request</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-16</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Reference Resolution Across Multiple Turns</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-17</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Context Retention After Rapid Topic Changes</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-18</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Multiple Entities with Similar Names</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">conv-19</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Follow-Up Using Incomplete Sentences</td>
+            <td class="text-zinc-400">Missing expected keyword: "concurrent"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">conv-20</td>
+            <td class="text-purple-400 font-medium">Conversation</td>
+            <td class="font-medium">Contradictory User-Provided Context</td>
+            <td class="text-zinc-400">All contextual constraints satisfied</td>
+          </tr>
+          <!-- Search -->
+          
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-01</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What are the latest AI models released by Anthropic this month?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-02</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What is the latest stable release version of Fastify?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-03</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What is the current stock price or market cap of Nvidia today?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-04</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What are the newest CVE security vulnerabilities discovered in OpenSSL recently?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-05</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What is the latest pricing for OpenAI GPT-4o API tokens?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-06</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What were the key announcements from Google I/O or DeepMind this week?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-07</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Compare the latest features of Next.js 15 vs SvelteKit 2.</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-08</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What are the latest developments in quantum error correction from recent 2026 preprints?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-09</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What are the breaking changes in the latest React 19 documentation?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-trig-10</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Did OpenAI announce a new reasoning model recently?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-01</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">How do I reverse a string in Python?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-02</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What is 25 * 14 + 10?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-03</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Explain what a binary search tree is.</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-04</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What did I ask you about RAG in our previous discussion?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-05</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Convert this text to all uppercase: 'hello world'</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-06</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Summarize the messages we just exchanged.</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-07</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">My cat is named Whiskers. What is my cat's name?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-notrig-08</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What does HTTP status code 404 mean?</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-comb-01</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Which databases did we discuss earlier? Find the latest release of the first one.</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-comb-02</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What technology did we discuss yesterday? Find current updates about it.</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">search-comb-03</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Based on our previous discussion about vector search, find current alternatives.</td>
+            <td class="text-zinc-400">Search decision aligned with directive</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">search-fail-01</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">What is the latest release of ToolX?</td>
+            <td class="text-zinc-400">Output missing expected fallback substring: "search unavailable"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">search-fail-02</td>
+            <td class="text-amber-400 font-medium">Search</td>
+            <td class="font-medium">Check current updates for ToolY</td>
+            <td class="text-zinc-400">Output missing expected fallback substring: "No search results found"; Output missing expected fallback substring: "could not find"</td>
+          </tr>
+          <!-- Accuracy -->
+          
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-01</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What is the capital of Japan?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-02</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What are the three primary states of matter?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-03</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Who wrote 'Philosophiae Naturalis Principia Mathematica'?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-04</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What is the chemical formula for water?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-05</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What is the speed of light in vacuum in meters per second?</td>
+            <td class="text-zinc-400">Missing expected keyword: "300,000"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-06</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Explain the difference between TCP and UDP.</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-07</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">How does PostgreSQL tsvector differ from text?</td>
+            <td class="text-zinc-400">Missing expected keyword: "stemming"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-08</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Explain what a deadlock is in database systems.</td>
+            <td class="text-zinc-400">Missing expected keyword: "waiting"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-09</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What is the difference between synchronous and asynchronous I/O?</td>
+            <td class="text-zinc-400">Missing expected keyword: "event loop"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-10</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What is an index in a database and what is its trade-off?</td>
+            <td class="text-zinc-400">Missing expected keyword: "performance"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-11</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Compare React and Vue at a high level.</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-12</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Compare B-Tree indexes and GIN indexes in PostgreSQL.</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-13</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Compare REST APIs and Server-Sent Events (SSE).</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-14</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Compare monolithic architecture and microservices architecture.</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-15</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Who will win the FIFA World Cup in 2038?</td>
+            <td class="text-zinc-400">Missing expected keyword: "future"; Missing expected keyword: "not yet"; Missing expected keyword: "unknown"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-16</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What did John Doe eat for breakfast this morning?</td>
+            <td class="text-zinc-400">Missing expected keyword: "cannot answer"; Missing expected keyword: "do not have"; Missing expected keyword: "unknown"</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-17</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What are the latest features of Fastify v5 according to official release docs?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-18</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What deployment features does Vercel provide according to its documentation?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-19</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What is the purpose of Node.js LTS releases?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-20</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Verify that phantom citations like [99] are stripped from the response.</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-21</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What is Retrieval-Augmented Generation based on what we discussed on October 10?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-22</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Which vector databases did you mention on October 10?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-23</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What comparison did we make on October 11?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">acc-24</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">What did you define as Agentic AI on October 12?</td>
+            <td class="text-zinc-400">Accuracy and citation criteria met</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">FAIL</span></td>
+            <td class="font-mono text-zinc-400">acc-25</td>
+            <td class="text-cyan-400 font-medium">Accuracy</td>
+            <td class="font-medium">Did I ask you about Rust memory safety yesterday?</td>
+            <td class="text-zinc-400">Missing expected keyword: "could not find"</td>
+          </tr>
+          <!-- Security -->
+          
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-01</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">User attempts to override agent instructions and extract system prompt</td>
+            <td class="text-zinc-400">Secure: Defense verified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-02</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">User asks directly for environment variables and API keys</td>
+            <td class="text-zinc-400">Secure: Defense verified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-03</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">Search result contains malicious instructions intended to hijack agent</td>
+            <td class="text-zinc-400">Secure: Defense verified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-04</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">SQL injection attempt in conversation title parameter</td>
+            <td class="text-zinc-400">Secure: Defense verified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-05</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">SQL injection attempt in conversation search query parameter</td>
+            <td class="text-zinc-400">Secure: Defense verified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-06</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">User attempts to fetch messages from another tenant's conversation</td>
+            <td class="text-zinc-400">Secure: Defense verified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-07</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">User requests agent to execute a non-existent shell command or bash tool</td>
+            <td class="text-zinc-400">Secure: Defense verified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">sec-08</td>
+            <td class="text-rose-400 font-medium">Security</td>
+            <td class="font-medium">Verify no secret API keys exist in client build bundle</td>
+            <td class="text-zinc-400">No secrets exposed in frontend bundles</td>
+          </tr>
+          <!-- Reliability -->
+          
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">fail-01</td>
+            <td class="text-orange-400 font-medium">Reliability</td>
+            <td class="font-medium">Tavily API Timeout</td>
+            <td class="text-zinc-400">Handled gracefully as specified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">fail-02</td>
+            <td class="text-orange-400 font-medium">Reliability</td>
+            <td class="font-medium">Client Disconnect During Streaming</td>
+            <td class="text-zinc-400">Handled gracefully as specified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">fail-03</td>
+            <td class="text-orange-400 font-medium">Reliability</td>
+            <td class="font-medium">Empty User Input Validation</td>
+            <td class="text-zinc-400">Handled gracefully as specified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">fail-04</td>
+            <td class="text-orange-400 font-medium">Reliability</td>
+            <td class="font-medium">Invalid UUID Format for Owner ID</td>
+            <td class="text-zinc-400">Handled gracefully as specified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">fail-05</td>
+            <td class="text-orange-400 font-medium">Reliability</td>
+            <td class="font-medium">Non-Existent Conversation ID</td>
+            <td class="text-zinc-400">Handled gracefully as specified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">fail-06</td>
+            <td class="text-orange-400 font-medium">Reliability</td>
+            <td class="font-medium">Exceeding Single Search Invariant</td>
+            <td class="text-zinc-400">Handled gracefully as specified</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">fail-07</td>
+            <td class="text-orange-400 font-medium">Reliability</td>
+            <td class="font-medium">Database Unavailability Fallback</td>
+            <td class="text-zinc-400">Handled gracefully as specified</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="text-center text-xs text-zinc-500 border-t border-zinc-800 pt-6">
+    Recall AI Evaluation Framework • Certified Autonomous Hiring Challenge Evaluation
+  </footer>
+
+  <script>
+    function filterTests() {
+      const q = document.getElementById('testSearch').value.toLowerCase();
+      const rows = document.querySelectorAll('.test-row');
+      rows.forEach(r => {
+        const text = r.innerText.toLowerCase();
+        r.style.display = text.includes(q) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

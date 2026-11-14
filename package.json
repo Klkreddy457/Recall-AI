@@ -15,7 +15,8 @@
     "migrate": "npm run migrate --workspace=server",
     "start": "npm run start --workspace=server",
     "bench": "npm run bench --workspace=server",
-    "eval": "npm run eval --workspace=server"
+    "eval": "npm run eval --workspace=server",
+    "evaluate": "tsx tests/evaluation/run-all.ts"
   },
   "engines": {
     "node": ">=20.0.0"

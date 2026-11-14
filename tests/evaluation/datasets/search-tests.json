@@ -1,0 +1,169 @@
+[
+  {
+    "id": "search-trig-01",
+    "category": "trigger",
+    "query": "What are the latest AI models released by Anthropic this month?",
+    "expectSearch": true,
+    "reason": "Current technology announcement / latest models"
+  },
+  {
+    "id": "search-trig-02",
+    "category": "trigger",
+    "query": "What is the latest stable release version of Fastify?",
+    "expectSearch": true,
+    "reason": "Latest software version requiring live verification"
+  },
+  {
+    "id": "search-trig-03",
+    "category": "trigger",
+    "query": "What is the current stock price or market cap of Nvidia today?",
+    "expectSearch": true,
+    "reason": "Current market data"
+  },
+  {
+    "id": "search-trig-04",
+    "category": "trigger",
+    "query": "What are the newest CVE security vulnerabilities discovered in OpenSSL recently?",
+    "expectSearch": true,
+    "reason": "Recent security vulnerability advisory"
+  },
+  {
+    "id": "search-trig-05",
+    "category": "trigger",
+    "query": "What is the latest pricing for OpenAI GPT-4o API tokens?",
+    "expectSearch": true,
+    "reason": "Current pricing information"
+  },
+  {
+    "id": "search-trig-06",
+    "category": "trigger",
+    "query": "What were the key announcements from Google I/O or DeepMind this week?",
+    "expectSearch": true,
+    "reason": "Recent company announcements"
+  },
+  {
+    "id": "search-trig-07",
+    "category": "trigger",
+    "query": "Compare the latest features of Next.js 15 vs SvelteKit 2.",
+    "expectSearch": true,
+    "reason": "Current product comparison"
+  },
+  {
+    "id": "search-trig-08",
+    "category": "trigger",
+    "query": "What are the latest developments in quantum error correction from recent 2026 preprints?",
+    "expectSearch": true,
+    "reason": "Recent research developments"
+  },
+  {
+    "id": "search-trig-09",
+    "category": "trigger",
+    "query": "What are the breaking changes in the latest React 19 documentation?",
+    "expectSearch": true,
+    "reason": "Latest official documentation"
+  },
+  {
+    "id": "search-trig-10",
+    "category": "trigger",
+    "query": "Did OpenAI announce a new reasoning model recently?",
+    "expectSearch": true,
+    "reason": "Recent AI model release inquiry"
+  },
+  {
+    "id": "search-notrig-01",
+    "category": "non_trigger",
+    "query": "How do I reverse a string in Python?",
+    "expectSearch": false,
+    "reason": "Basic programming syntax question"
+  },
+  {
+    "id": "search-notrig-02",
+    "category": "non_trigger",
+    "query": "What is 25 * 14 + 10?",
+    "expectSearch": false,
+    "reason": "Elementary arithmetic"
+  },
+  {
+    "id": "search-notrig-03",
+    "category": "non_trigger",
+    "query": "Explain what a binary search tree is.",
+    "expectSearch": false,
+    "reason": "Standard computer science concept"
+  },
+  {
+    "id": "search-notrig-04",
+    "category": "non_trigger",
+    "query": "What did I ask you about RAG in our previous discussion?",
+    "expectSearch": false,
+    "reason": "Historical conversation memory retrieval"
+  },
+  {
+    "id": "search-notrig-05",
+    "category": "non_trigger",
+    "query": "Convert this text to all uppercase: 'hello world'",
+    "expectSearch": false,
+    "reason": "Simple text transformation"
+  },
+  {
+    "id": "search-notrig-06",
+    "category": "non_trigger",
+    "query": "Summarize the messages we just exchanged.",
+    "expectSearch": false,
+    "reason": "Summarization of active conversation context"
+  },
+  {
+    "id": "search-notrig-07",
+    "category": "non_trigger",
+    "query": "My cat is named Whiskers. What is my cat's name?",
+    "expectSearch": false,
+    "reason": "Fact provided directly in context"
+  },
+  {
+    "id": "search-notrig-08",
+    "category": "non_trigger",
+    "query": "What does HTTP status code 404 mean?",
+    "expectSearch": false,
+    "reason": "Standard stable protocol specification"
+  },
+  {
+    "id": "search-comb-01",
+    "category": "combined",
+    "query": "Which databases did we discuss earlier? Find the latest release of the first one.",
+    "expectSearch": true,
+    "expectMemory": true,
+    "reason": "Requires retrieving earlier discussed databases before executing targeted web search"
+  },
+  {
+    "id": "search-comb-02",
+    "category": "combined",
+    "query": "What technology did we discuss yesterday? Find current updates about it.",
+    "expectSearch": true,
+    "expectMemory": true,
+    "reason": "Requires resolving yesterday's topic then searching for current updates"
+  },
+  {
+    "id": "search-comb-03",
+    "category": "combined",
+    "query": "Based on our previous discussion about vector search, find current alternatives.",
+    "expectSearch": true,
+    "expectMemory": true,
+    "reason": "Memory provides discussion context, search provides current alternatives"
+  },
+  {
+    "id": "search-fail-01",
+    "category": "failure_handling",
+    "query": "What is the latest release of ToolX?",
+    "simulateError": "Tavily timeout: 8000ms exceeded",
+    "expectSearch": true,
+    "expectGracefulError": true,
+    "expectedOutputContains": ["search unavailable"]
+  },
+  {
+    "id": "search-fail-02",
+    "category": "failure_handling",
+    "query": "Check current updates for ToolY",
+    "simulateEmptyResults": true,
+    "expectSearch": true,
+    "expectedOutputContains": ["No search results found", "could not find"]
+  }
+]

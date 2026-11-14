@@ -1,0 +1,207 @@
+[
+  {
+    "id": "acc-01",
+    "category": "stable_factual",
+    "question": "What is the capital of Japan?",
+    "referenceFact": "Tokyo is the capital of Japan.",
+    "expectedKeywords": ["Tokyo"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-02",
+    "category": "stable_factual",
+    "question": "What are the three primary states of matter?",
+    "referenceFact": "Solid, liquid, and gas (plasma is also recognized).",
+    "expectedKeywords": ["solid", "liquid", "gas"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-03",
+    "category": "stable_factual",
+    "question": "Who wrote 'Philosophiae Naturalis Principia Mathematica'?",
+    "referenceFact": "Sir Isaac Newton.",
+    "expectedKeywords": ["Isaac Newton", "Newton"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-04",
+    "category": "stable_factual",
+    "question": "What is the chemical formula for water?",
+    "referenceFact": "H2O.",
+    "expectedKeywords": ["H2O"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-05",
+    "category": "stable_factual",
+    "question": "What is the speed of light in vacuum in meters per second?",
+    "referenceFact": "Approximately 299,792,458 meters per second.",
+    "expectedKeywords": ["299,792,458", "300,000"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-06",
+    "category": "technical_explanation",
+    "question": "Explain the difference between TCP and UDP.",
+    "referenceFact": "TCP is connection-oriented and reliable with acknowledgements and ordering, whereas UDP is connectionless and lightweight without delivery guarantees.",
+    "expectedKeywords": ["connection-oriented", "reliable", "connectionless", "UDP"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-07",
+    "category": "technical_explanation",
+    "question": "How does PostgreSQL tsvector differ from text?",
+    "referenceFact": "tsvector is a sorted list of distinct normalized lexemes, stripped of stop words and stemmed for rapid lexical indexing.",
+    "expectedKeywords": ["lexeme", "stemming", "sorted", "normalized"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-08",
+    "category": "technical_explanation",
+    "question": "Explain what a deadlock is in database systems.",
+    "referenceFact": "A situation where two or more transactions each hold locks and wait indefinitely for locks held by the other.",
+    "expectedKeywords": ["lock", "waiting", "transaction"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-09",
+    "category": "technical_explanation",
+    "question": "What is the difference between synchronous and asynchronous I/O?",
+    "referenceFact": "Synchronous I/O blocks the calling thread until operation completes, while asynchronous I/O permits execution to continue while I/O proceeds in background.",
+    "expectedKeywords": ["block", "event loop", "asynchronous"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-10",
+    "category": "technical_explanation",
+    "question": "What is an index in a database and what is its trade-off?",
+    "referenceFact": "An index accelerates read retrieval speed at the cost of additional disk storage and slower write/update operations.",
+    "expectedKeywords": ["read", "write", "storage", "performance"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-11",
+    "category": "comparison",
+    "question": "Compare React and Vue at a high level.",
+    "referenceFact": "React emphasizes JSX and flexible composition; Vue provides built-in single file components with two-way data binding options and opinionated tooling.",
+    "expectedKeywords": ["React", "Vue", "JSX"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-12",
+    "category": "comparison",
+    "question": "Compare B-Tree indexes and GIN indexes in PostgreSQL.",
+    "referenceFact": "B-Trees excel at scalar equality and range queries (<, =, >), while GIN (Generalized Inverted Index) excels at composite items like tsvector, arrays, and JSONB containment.",
+    "expectedKeywords": ["B-Tree", "GIN", "range", "tsvector"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-13",
+    "category": "comparison",
+    "question": "Compare REST APIs and Server-Sent Events (SSE).",
+    "referenceFact": "REST uses standard request-response; SSE enables unidirectional real-time streaming from server to client over a persistent HTTP connection.",
+    "expectedKeywords": ["request-response", "streaming", "HTTP"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-14",
+    "category": "comparison",
+    "question": "Compare monolithic architecture and microservices architecture.",
+    "referenceFact": "Monoliths package all services into a single codebase/deployment; microservices decouple domains into independently deployable network services.",
+    "expectedKeywords": ["deployable", "decouple", "codebase"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-15",
+    "category": "insufficient_evidence",
+    "question": "Who will win the FIFA World Cup in 2038?",
+    "referenceFact": "The 2038 World Cup has not occurred and cannot be known.",
+    "expectedKeywords": ["cannot be known", "future", "not yet", "unknown"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-16",
+    "category": "insufficient_evidence",
+    "question": "What did John Doe eat for breakfast this morning?",
+    "referenceFact": "Insufficient information about an unspecified individual.",
+    "expectedKeywords": ["cannot answer", "do not have", "unknown"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-17",
+    "category": "current_factual_citation",
+    "question": "What are the latest features of Fastify v5 according to official release docs?",
+    "referenceFact": "Fastify v5 introduces routing optimizations and schema updates [2].",
+    "expectedKeywords": ["Fastify", "routing"],
+    "requiresCitation": true,
+    "mockSearchKey": "default"
+  },
+  {
+    "id": "acc-18",
+    "category": "current_factual_citation",
+    "question": "What deployment features does Vercel provide according to its documentation?",
+    "referenceFact": "Vercel provides edge network routing and serverless execution [1].",
+    "expectedKeywords": ["Vercel", "edge"],
+    "requiresCitation": true,
+    "mockSearchKey": "default"
+  },
+  {
+    "id": "acc-19",
+    "category": "current_factual_citation",
+    "question": "What is the purpose of Node.js LTS releases?",
+    "referenceFact": "Node.js LTS provides long-term stability and security maintenance [3].",
+    "expectedKeywords": ["stability", "security"],
+    "requiresCitation": true,
+    "mockSearchKey": "default"
+  },
+  {
+    "id": "acc-20",
+    "category": "citation_stripping_validation",
+    "question": "Verify that phantom citations like [99] are stripped from the response.",
+    "referenceFact": "Any citation number outside the returned backend search result set is stripped.",
+    "expectedKeywords": ["Fastify"],
+    "requiresCitation": true,
+    "mockSearchKey": "default"
+  },
+  {
+    "id": "acc-21",
+    "category": "historical_memory_accuracy",
+    "question": "What is Retrieval-Augmented Generation based on what we discussed on October 10?",
+    "referenceFact": "RAG combines retrieval of external knowledge with language model generation.",
+    "expectedKeywords": ["retrieval", "generation", "external"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-22",
+    "category": "historical_memory_accuracy",
+    "question": "Which vector databases did you mention on October 10?",
+    "referenceFact": "PostgreSQL with pgvector, Qdrant, Milvus, and Pinecone.",
+    "expectedKeywords": ["pgvector", "Qdrant", "Pinecone"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-23",
+    "category": "historical_memory_accuracy",
+    "question": "What comparison did we make on October 11?",
+    "referenceFact": "PostgreSQL FTS and vector search.",
+    "expectedKeywords": ["FTS", "vector search"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-24",
+    "category": "historical_memory_accuracy",
+    "question": "What did you define as Agentic AI on October 12?",
+    "referenceFact": "Autonomous systems capable of planning, executing multi-step tool calls, and adapting to environments.",
+    "expectedKeywords": ["autonomous", "tool", "planning"],
+    "requiresCitation": false
+  },
+  {
+    "id": "acc-25",
+    "category": "unsupported_memory_refusal",
+    "question": "Did I ask you about Rust memory safety yesterday?",
+    "referenceFact": "No matching records found in conversation history.",
+    "expectedKeywords": ["could not find", "no matching records"],
+    "forbiddenKeywords": ["You asked about ownership and borrowing"],
+    "requiresCitation": false
+  }
+]

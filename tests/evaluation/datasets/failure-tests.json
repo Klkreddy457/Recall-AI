@@ -1,0 +1,56 @@
+[
+  {
+    "id": "fail-01",
+    "scenario": "Tavily API Timeout",
+    "description": "Search client experiences an 8000ms timeout",
+    "simulate": "tavily_timeout",
+    "expectedStatus": "complete",
+    "expectedMessage": "search unavailable"
+  },
+  {
+    "id": "fail-02",
+    "scenario": "Client Disconnect During Streaming",
+    "description": "Client closes SSE connection mid-flight",
+    "simulate": "client_abort",
+    "expectedStatus": "interrupted"
+  },
+  {
+    "id": "fail-03",
+    "scenario": "Empty User Input Validation",
+    "description": "User submits empty string or whitespace only",
+    "payload": "    ",
+    "expectedStatusCode": 400,
+    "expectedError": "Bad Request"
+  },
+  {
+    "id": "fail-04",
+    "scenario": "Invalid UUID Format for Owner ID",
+    "description": "Client sends non-UUID x-owner-id header",
+    "headerValue": "not-a-uuid-1234",
+    "expectedStatusCode": 400,
+    "expectedError": "Bad Request"
+  },
+  {
+    "id": "fail-05",
+    "scenario": "Non-Existent Conversation ID",
+    "description": "Client requests an unknown conversation ID",
+    "conversationId": "00000000-0000-0000-0000-000000009999",
+    "expectedStatusCode": 404,
+    "expectedError": "Not Found"
+  },
+  {
+    "id": "fail-06",
+    "scenario": "Exceeding Single Search Invariant",
+    "description": "Model attempts to call web_search a second time in one turn",
+    "simulate": "dual_tool_call",
+    "expectedResult": "Error: Maximum of 1 web search allowed per turn."
+  },
+  {
+    "id": "fail-07",
+    "scenario": "Database Unavailability Fallback",
+    "description": "PostgreSQL connection refused / offline",
+    "simulate": "db_offline",
+    "expectedStatus": "complete",
+    "expectedBehavior": "Turn completes gracefully using in-memory fallback without crashing"
+  }
+]
