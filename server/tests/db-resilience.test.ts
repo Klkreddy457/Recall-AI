@@ -4,15 +4,19 @@ import { buildApp } from '../src/app.js';
 import { PostgresDataStore } from '../src/db/store.js';
 
 describe('Database Disconnection & Resilience', () => {
-  it('throws error on production startup when DATABASE_URL cannot connect', async () => {
-    await expect(
-      buildApp({
-        configOverrides: {
-          NODE_ENV: 'production',
-          DATABASE_URL: 'postgresql://postgres:wrong@127.0.0.1:54329/nonexistent',
-        },
-      })
-    ).rejects.toThrow(/Production database connection failed/);
+  it('handles production startup when DATABASE_URL cannot connect and returns 503 on health', async () => {
+    const app = await buildApp({
+      configOverrides: {
+        NODE_ENV: 'production',
+        DATABASE_URL: 'postgresql://postgres:wrong@127.0.0.1:54329/nonexistent',
+      },
+      logger: false,
+    });
+    const res = await app.inject({ method: 'GET', url: '/health' });
+    expect(res.statusCode).toBe(503);
+    const body = JSON.parse(res.body);
+    expect(body.status).toBe('error');
+    expect(body.connected).toBe(false);
   });
 
   it('PostgresDataStore in production throws on query failure without fallback', async () => {

@@ -46,14 +46,17 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
       store = new PostgresDataStore(pool, { allowFallback: cfg.NODE_ENV !== 'production' });
     } catch (err) {
       if (cfg.NODE_ENV === 'production') {
-        throw new Error(
-          `Production database connection failed: Unable to connect to PostgreSQL using DATABASE_URL. Reason: ${(err as Error).message}`
+        console.error(
+          `[ERROR] Production database connection failed: Unable to connect to PostgreSQL using DATABASE_URL. Reason: ${(err as Error).message}`
         );
+        pool = null;
+        store = new PostgresDataStore(getPool(cfg), { allowFallback: false });
+      } else {
+        // Non-production fallback with explicit warning
+        console.warn(`[WARN] PostgreSQL offline (${(err as Error).message}). Using in-memory fallback for local development.`);
+        pool = null;
+        store = globalInMemoryStore;
       }
-      // Non-production fallback with explicit warning
-      console.warn(`[WARN] PostgreSQL offline (${(err as Error).message}). Using in-memory fallback for local development.`);
-      pool = null;
-      store = globalInMemoryStore;
     }
   }
 
@@ -113,15 +116,20 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
     await app.register(healthRoutes(pool));
   } else {
     // Health route when postgres pool is offline
-    app.get('/health', async (_req, reply) => {
+    const offlineHealthHandler = async (
+      _req: unknown,
+      reply: { status: (code: number) => { send: (body: unknown) => unknown } }
+    ) => {
       const isProd = cfg.NODE_ENV === 'production';
       return reply.status(isProd ? 503 : 200).send({
         status: isProd ? 'error' : 'degraded',
-        db: 'in-memory (postgres offline)',
+        db: 'disconnected',
         connected: false,
         timestamp: new Date().toISOString(),
       });
-    });
+    };
+    app.get('/health', offlineHealthHandler);
+    app.get('/api/health', offlineHealthHandler);
   }
 
   await app.register(conversationRoutes(store));
