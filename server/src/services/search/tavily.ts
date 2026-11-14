@@ -1,5 +1,84 @@
 import type { SearchClient, SearchResult } from './types.js';
 
+export const OFFICIAL_VENDOR_DOMAINS = [
+  'hubspot.com',
+  'salesforce.com',
+  'pipedrive.com',
+  'zoho.com',
+  'freshworks.com',
+  'freshsales.io',
+  'neon.tech',
+  'supabase.com',
+  'railway.app',
+  'postgresql.org',
+  'mysql.com',
+  'docs.github.com',
+  'stripe.com',
+  'openai.com',
+  'vercel.com',
+];
+
+export const EXCLUDED_NOISE_PATTERNS = [
+  /dropee/i,
+  /wordle/i,
+  /crossword/i,
+  /daily\s+quiz/i,
+  /trivia\s+answers/i,
+  /puzzle\s+clue/i,
+  /airdrop\s+daily/i,
+  /crypto\s+quiz/i,
+];
+
+/**
+ * Filters out noise/quiz/aggregator sites and prioritizes official vendor domains and documentation pages.
+ */
+export function rankAndFilterSearchResults(
+  results: SearchResult[],
+  query: string,
+  maxResults = 5
+): SearchResult[] {
+  const queryLower = query.toLowerCase();
+  const isExplicitQuizSearch = /quiz|wordle|crossword|puzzle/i.test(queryLower);
+
+  const filtered = results.filter((r) => {
+    if (isExplicitQuizSearch) return true;
+    const textToCheck = `${r.title} ${r.url} ${r.content}`.toLowerCase();
+    return !EXCLUDED_NOISE_PATTERNS.some((pat) => pat.test(textToCheck));
+  });
+
+  // Score each result: official vendor domains and pricing pages receive priority boosting
+  const scored = filtered.map((item) => {
+    let score = 0;
+    let hostname = '';
+    try {
+      hostname = new URL(item.url).hostname.replace(/^www\./, '').toLowerCase();
+    } catch {
+      hostname = item.url.toLowerCase();
+    }
+
+    if (OFFICIAL_VENDOR_DOMAINS.some((d) => hostname === d || hostname.endsWith(`.${d}`))) {
+      score += 100;
+    }
+    if (/pricing|docs|documentation|pricing-plans|features/i.test(item.url)) {
+      score += 30;
+    }
+    if (/pricing|plans|cost|subscription/i.test(item.title)) {
+      score += 15;
+    }
+    return { item, score };
+  });
+
+  // Sort descending by score
+  scored.sort((a, b) => b.score - a.score);
+
+  const candidates = scored.length > 0 ? scored : results.map((item) => ({ item, score: 0 }));
+
+  return candidates.slice(0, maxResults).map(({ item }, idx) => ({
+    ...item,
+    id: idx + 1,
+  }));
+}
+
 export interface TavilyConfig {
   apiKey: string;
   baseUrl?: string;
@@ -69,7 +148,7 @@ export class TavilySearchClient implements SearchClient {
         }>;
       };
 
-      const results: SearchResult[] = (data.results || []).slice(0, this.maxResults).map((item, index) => {
+      const rawResults: SearchResult[] = (data.results || []).map((item, index) => {
         let content = (item.content || '').trim();
         if (content.length > this.maxSnippetChars) {
           content = content.slice(0, this.maxSnippetChars) + '...';
@@ -84,7 +163,7 @@ export class TavilySearchClient implements SearchClient {
         };
       });
 
-      return results;
+      return rankAndFilterSearchResults(rawResults, trimmed, this.maxResults);
     } catch (err) {
       if ((err as Error).name === 'AbortError') {
         throw new Error('Search request timed out or was aborted');

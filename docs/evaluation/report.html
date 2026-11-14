@@ -31,7 +31,7 @@
       </div>
       <p class="text-zinc-400 text-sm mt-1">Comprehensive AI Agent Evaluation & Benchmarking Report</p>
       <div class="flex gap-4 text-xs text-zinc-500 mt-2">
-        <span>Evaluated: 2026-11-14T01:41:00.516Z</span>
+        <span>Evaluated: 2026-11-14T05:39:08.806Z</span>
         <span>•</span>
         <span>Target: <a href="https://recall-ai-app-six.vercel.app" target="_blank" class="text-blue-400 underline">Vercel Deployment</a></span>
       </div>
@@ -53,12 +53,12 @@
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
     <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
       <div class="text-xs text-zinc-400">Total Genuine Tests</div>
-      <div class="text-2xl font-bold mt-1">95</div>
-      <div class="text-xs text-emerald-400 mt-1">95 Passed (0 Fabricated)</div>
+      <div class="text-2xl font-bold mt-1">99</div>
+      <div class="text-xs text-emerald-400 mt-1">99 Passed (0 Fabricated)</div>
     </div>
     <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
       <div class="text-xs text-zinc-400">Memory Precision@K</div>
-      <div class="text-2xl font-bold mt-1">0.55</div>
+      <div class="text-2xl font-bold mt-1">0.56</div>
       <div class="text-xs text-zinc-400 mt-1">Recall@K: 1</div>
     </div>
     <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
@@ -68,7 +68,7 @@
     </div>
     <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
       <div class="text-xs text-zinc-400">Engine TTFE (Median)</div>
-      <div class="text-2xl font-bold mt-1 text-purple-400">0.09 ms</div>
+      <div class="text-2xl font-bold mt-1 text-purple-400">0.08 ms</div>
       <div class="text-xs text-zinc-400 mt-1">Total Turn: 0.09 ms</div>
     </div>
   </div>
@@ -87,7 +87,7 @@
           <div class="bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
         </div>
         <div class="text-xs text-zinc-400 space-y-1">
-          <div>• Tests: 12/12 passed</div>
+          <div>• Tests: 16/16 passed</div>
           <div>• Unsupported claim rate: 0%</div>
         </div>
       </div>
@@ -236,50 +236,50 @@
             <td class="py-3 font-semibold text-blue-400">A</td>
             <td>Basic Question (No Search, No Memory)</td>
             <td class="font-mono">0.09 ms</td>
-            <td class="font-mono">0.2 ms</td>
-            <td class="font-mono">0.22 ms</td>
+            <td class="font-mono">0.18 ms</td>
+            <td class="font-mono">0.18 ms</td>
             <td class="font-mono text-zinc-500">0.08 ms</td>
-            <td class="font-mono text-zinc-500">0.22 ms</td>
+            <td class="font-mono text-zinc-500">0.18 ms</td>
             <td class="font-mono text-zinc-500">0.11 ms</td>
           </tr>
           <tr>
             <td class="py-3 font-semibold text-blue-400">B</td>
             <td>Memory Retrieval Query</td>
-            <td class="font-mono">0.11 ms</td>
-            <td class="font-mono">0.14 ms</td>
-            <td class="font-mono">0.15 ms</td>
-            <td class="font-mono text-zinc-500">0.09 ms</td>
-            <td class="font-mono text-zinc-500">0.15 ms</td>
+            <td class="font-mono">0.1 ms</td>
+            <td class="font-mono">0.16 ms</td>
+            <td class="font-mono">0.18 ms</td>
+            <td class="font-mono text-zinc-500">0.08 ms</td>
+            <td class="font-mono text-zinc-500">0.19 ms</td>
             <td class="font-mono text-zinc-500">0.11 ms</td>
           </tr>
           <tr>
             <td class="py-3 font-semibold text-blue-400">C</td>
             <td>Live Web Search Query</td>
-            <td class="font-mono">0.12 ms</td>
-            <td class="font-mono">0.21 ms</td>
-            <td class="font-mono">0.24 ms</td>
+            <td class="font-mono">0.11 ms</td>
+            <td class="font-mono">0.17 ms</td>
+            <td class="font-mono">0.19 ms</td>
             <td class="font-mono text-zinc-500">0.1 ms</td>
-            <td class="font-mono text-zinc-500">0.25 ms</td>
-            <td class="font-mono text-zinc-500">0.13 ms</td>
+            <td class="font-mono text-zinc-500">0.19 ms</td>
+            <td class="font-mono text-zinc-500">0.12 ms</td>
           </tr>
           <tr>
             <td class="py-3 font-semibold text-blue-400">D</td>
             <td>Combined Memory + Search Query</td>
-            <td class="font-mono">0.1 ms</td>
             <td class="font-mono">0.12 ms</td>
-            <td class="font-mono">0.12 ms</td>
+            <td class="font-mono">0.16 ms</td>
+            <td class="font-mono">0.17 ms</td>
             <td class="font-mono text-zinc-500">0.1 ms</td>
+            <td class="font-mono text-zinc-500">0.17 ms</td>
             <td class="font-mono text-zinc-500">0.12 ms</td>
-            <td class="font-mono text-zinc-500">0.1 ms</td>
           </tr>
           <tr>
             <td class="py-3 font-semibold text-blue-400">E</td>
             <td>Long Conversation Context Query</td>
-            <td class="font-mono">0.09 ms</td>
-            <td class="font-mono">0.12 ms</td>
-            <td class="font-mono">0.12 ms</td>
+            <td class="font-mono">0.08 ms</td>
+            <td class="font-mono">0.13 ms</td>
+            <td class="font-mono">0.15 ms</td>
             <td class="font-mono text-zinc-500">0.08 ms</td>
-            <td class="font-mono text-zinc-500">0.12 ms</td>
+            <td class="font-mono text-zinc-500">0.15 ms</td>
             <td class="font-mono text-zinc-500">0.09 ms</td>
           </tr>
         </tbody>
@@ -290,7 +290,7 @@
   <!-- Test Explorer Section -->
   <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-10">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-      <h3 class="text-lg font-bold">Comprehensive Test Registry (95 Tests)</h3>
+      <h3 class="text-lg font-bold">Comprehensive Test Registry (99 Tests)</h3>
       <input type="text" id="testSearch" placeholder="Search tests by keyword..." class="bg-zinc-950 border border-zinc-700 rounded-lg px-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-blue-500 w-full md:w-64" onkeyup="filterTests()">
     </div>
     <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
@@ -326,14 +326,14 @@
             <td class="font-mono text-zinc-400">mem-03</td>
             <td class="text-blue-400 font-medium">Memory</td>
             <td class="font-medium">Timestamp Retrieval (When did I ask about RAG?)</td>
-            <td class="text-zinc-400">Precision: 0.25, Recall: 1</td>
+            <td class="text-zinc-400">Precision: 0.2, Recall: 1</td>
           </tr>
           <tr class="test-row">
             <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
             <td class="font-mono text-zinc-400">mem-04</td>
             <td class="text-blue-400 font-medium">Memory</td>
             <td class="font-medium">Entity Extraction Across Memory (Databases discussed)</td>
-            <td class="text-zinc-400">Precision: 0.67, Recall: 1</td>
+            <td class="text-zinc-400">Precision: 0.4, Recall: 1</td>
           </tr>
           <tr class="test-row">
             <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
@@ -347,7 +347,7 @@
             <td class="font-mono text-zinc-400">mem-06</td>
             <td class="text-blue-400 font-medium">Memory</td>
             <td class="font-medium">Topic Fact Retrieval (What did you tell me about PostgreSQL?)</td>
-            <td class="text-zinc-400">Precision: 0.67, Recall: 1</td>
+            <td class="text-zinc-400">Precision: 0.29, Recall: 1</td>
           </tr>
           <tr class="test-row">
             <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
@@ -390,6 +390,34 @@
             <td class="text-blue-400 font-medium">Memory</td>
             <td class="font-medium">Timezone Conversion Boundary (New York vs Tokyo)</td>
             <td class="text-zinc-400">Precision: 0.5, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-13</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Bug A Historical Date Recovery (November 3, 2026)</td>
+            <td class="text-zinc-400">Precision: 1, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-14</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Dataset A: 5 CRM Evaluation and Team Pricing (November 9, 2026)</td>
+            <td class="text-zinc-400">Precision: 1, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-15</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Dataset B: Managed PostgreSQL Hosting (November 10, 2026)</td>
+            <td class="text-zinc-400">Precision: 1, Recall: 1</td>
+          </tr>
+          <tr class="test-row">
+            <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">PASS</span></td>
+            <td class="font-mono text-zinc-400">mem-16</td>
+            <td class="text-blue-400 font-medium">Memory</td>
+            <td class="font-medium">Empty Memory Date Signal (Unrecorded Date November 1, 2026)</td>
+            <td class="text-zinc-400">Precision: 0, Recall: 1</td>
           </tr>
           <!-- Conversation -->
           

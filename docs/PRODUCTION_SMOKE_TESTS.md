@@ -176,3 +176,4 @@ To link the deployed Vercel application with the Neon production PostgreSQL bran
    - `DATABASE_SSL`: `true`
 4. Trigger a deployment or push a commit to redeploy.
 5. Verify `GET https://recall-ai-app-six.vercel.app/api/health` returns `HTTP 200 OK` with `"connected": true`.
+

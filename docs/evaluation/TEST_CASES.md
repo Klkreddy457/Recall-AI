@@ -1,20 +1,20 @@
 # Recall AI - Comprehensive Test Cases Catalog
 
-Generated at: 2026-11-14T01:41:00.516Z  
+Generated at: 2026-11-14T05:39:08.806Z  
 Target Environment: Local Engine Runner & Deployed Vercel Edge Runtime  
-Total Executed Test Cases: 95
+Total Executed Test Cases: 99
 
 ## Summary of Test Cases by Category
 
 | Category | Total | Passed | Failed | Blocked | Pass Rate |
 |---|---:|---:|---:|---:|---:|
-| **Persistent Memory** | 12 | 12 | 0 | 0 | 100% |
+| **Persistent Memory** | 16 | 16 | 0 | 0 | 100% |
 | **Conversation Intelligence** | 20 | 20 | 0 | 0 | 100% |
 | **Web Search Decisions** | 23 | 23 | 0 | 0 | 100% |
 | **Answer Accuracy & Citations** | 25 | 25 | 0 | 0 | 100% |
 | **Reliability & Failure Scenarios** | 7 | 7 | 0 | 0 | 100% |
 | **Security & Injection** | 8 | 8 | 0 | 0 | 100% |
-| **Total** | **95** | **95** | **0** | **0** | **100%** |
+| **Total** | **99** | **99** | **0** | **0** | **100%** |
 
 ---
 
@@ -32,14 +32,14 @@ Total Executed Test Cases: 95
 - **Result:** Precision: 1, Recall: 1
 
 #### [PASS] mem-03: Timestamp Retrieval (When did I ask about RAG?)
-- **Retrieved Record IDs:** msg-a-2, msg-a-1, msg-a-3, msg-a-4
-- **Precision:** 0.25 | **Recall:** 1
-- **Result:** Precision: 0.25, Recall: 1
+- **Retrieved Record IDs:** msg-a-2, msg-pg-2, msg-a-1, msg-a-3, msg-a-4
+- **Precision:** 0.2 | **Recall:** 1
+- **Result:** Precision: 0.2, Recall: 1
 
 #### [PASS] mem-04: Entity Extraction Across Memory (Databases discussed)
-- **Retrieved Record IDs:** msg-a-3, msg-a-4, msg-a-1, msg-a-2, msg-b-1, msg-b-2
-- **Precision:** 0.67 | **Recall:** 1
-- **Result:** Precision: 0.67, Recall: 1
+- **Retrieved Record IDs:** msg-a-3, msg-a-4, msg-pg-2, msg-a-1, msg-a-2, msg-b-1, msg-b-2, msg-pg-1, msg-sql-1, msg-sql-2
+- **Precision:** 0.4 | **Recall:** 1
+- **Result:** Precision: 0.4, Recall: 1
 
 #### [PASS] mem-05: Date Comparison Retrieval (October 11)
 - **Retrieved Record IDs:** msg-b-1, msg-b-2
@@ -47,9 +47,9 @@ Total Executed Test Cases: 95
 - **Result:** Precision: 1, Recall: 1
 
 #### [PASS] mem-06: Topic Fact Retrieval (What did you tell me about PostgreSQL?)
-- **Retrieved Record IDs:** msg-a-4, msg-b-1, msg-b-2
-- **Precision:** 0.67 | **Recall:** 1
-- **Result:** Precision: 0.67, Recall: 1
+- **Retrieved Record IDs:** msg-a-4, msg-b-1, msg-b-2, msg-pg-1, msg-pg-2, msg-sql-1, msg-sql-2
+- **Precision:** 0.29 | **Recall:** 1
+- **Result:** Precision: 0.29, Recall: 1
 
 #### [PASS] mem-07: Chronological Precedence (Discussed before Agentic AI)
 - **Retrieved Record IDs:** msg-b-1, msg-b-2
@@ -80,6 +80,26 @@ Total Executed Test Cases: 95
 - **Retrieved Record IDs:** msg-a-1, msg-a-2, msg-a-3, msg-a-4
 - **Precision:** 0.5 | **Recall:** 1
 - **Result:** Precision: 0.5, Recall: 1
+
+#### [PASS] mem-13: Bug A Historical Date Recovery (November 3, 2026)
+- **Retrieved Record IDs:** msg-sql-1, msg-sql-2
+- **Precision:** 1 | **Recall:** 1
+- **Result:** Precision: 1, Recall: 1
+
+#### [PASS] mem-14: Dataset A: 5 CRM Evaluation and Team Pricing (November 9, 2026)
+- **Retrieved Record IDs:** msg-crm-1, msg-crm-2
+- **Precision:** 1 | **Recall:** 1
+- **Result:** Precision: 1, Recall: 1
+
+#### [PASS] mem-15: Dataset B: Managed PostgreSQL Hosting (November 10, 2026)
+- **Retrieved Record IDs:** msg-pg-1, msg-pg-2
+- **Precision:** 1 | **Recall:** 1
+- **Result:** Precision: 1, Recall: 1
+
+#### [PASS] mem-16: Empty Memory Date Signal (Unrecorded Date November 1, 2026)
+- **Retrieved Record IDs:** None (Empty Signal)
+- **Precision:** 0 | **Recall:** 1
+- **Result:** Precision: 0, Recall: 1
 
 ---
 

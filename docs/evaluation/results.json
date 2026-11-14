@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-11-14T01:41:00.516Z",
+  "timestamp": "2026-11-14T05:39:08.806Z",
   "environment": "Local Engine Runner & Deployed Vercel Edge Runtime",
   "deploymentUrl": "https://recall-ai-app-six.vercel.app/",
   "githubRepo": "https://github.com/Klkreddy457/Recall-AI",
-  "totalTests": 95,
-  "totalPassed": 95,
+  "totalTests": 99,
+  "totalPassed": 99,
   "overallPassRate": 100,
   "scores": {
     "memory": 20,
@@ -52,14 +52,15 @@
         "passed": true,
         "retrievedIds": [
           "msg-a-2",
+          "msg-pg-2",
           "msg-a-1",
           "msg-a-3",
           "msg-a-4"
         ],
-        "precision": 0.25,
+        "precision": 0.2,
         "recall": 1,
         "emptySignalMatched": true,
-        "notes": "Precision: 0.25, Recall: 1"
+        "notes": "Precision: 0.2, Recall: 1"
       },
       {
         "id": "mem-04",
@@ -68,15 +69,19 @@
         "retrievedIds": [
           "msg-a-3",
           "msg-a-4",
+          "msg-pg-2",
           "msg-a-1",
           "msg-a-2",
           "msg-b-1",
-          "msg-b-2"
+          "msg-b-2",
+          "msg-pg-1",
+          "msg-sql-1",
+          "msg-sql-2"
         ],
-        "precision": 0.67,
+        "precision": 0.4,
         "recall": 1,
         "emptySignalMatched": true,
-        "notes": "Precision: 0.67, Recall: 1"
+        "notes": "Precision: 0.4, Recall: 1"
       },
       {
         "id": "mem-05",
@@ -98,12 +103,16 @@
         "retrievedIds": [
           "msg-a-4",
           "msg-b-1",
-          "msg-b-2"
+          "msg-b-2",
+          "msg-pg-1",
+          "msg-pg-2",
+          "msg-sql-1",
+          "msg-sql-2"
         ],
-        "precision": 0.67,
+        "precision": 0.29,
         "recall": 1,
         "emptySignalMatched": true,
-        "notes": "Precision: 0.67, Recall: 1"
+        "notes": "Precision: 0.29, Recall: 1"
       },
       {
         "id": "mem-07",
@@ -180,12 +189,61 @@
         "recall": 1,
         "emptySignalMatched": true,
         "notes": "Precision: 0.5, Recall: 1"
+      },
+      {
+        "id": "mem-13",
+        "title": "Bug A Historical Date Recovery (November 3, 2026)",
+        "passed": true,
+        "retrievedIds": [
+          "msg-sql-1",
+          "msg-sql-2"
+        ],
+        "precision": 1,
+        "recall": 1,
+        "emptySignalMatched": true,
+        "notes": "Precision: 1, Recall: 1"
+      },
+      {
+        "id": "mem-14",
+        "title": "Dataset A: 5 CRM Evaluation and Team Pricing (November 9, 2026)",
+        "passed": true,
+        "retrievedIds": [
+          "msg-crm-1",
+          "msg-crm-2"
+        ],
+        "precision": 1,
+        "recall": 1,
+        "emptySignalMatched": true,
+        "notes": "Precision: 1, Recall: 1"
+      },
+      {
+        "id": "mem-15",
+        "title": "Dataset B: Managed PostgreSQL Hosting (November 10, 2026)",
+        "passed": true,
+        "retrievedIds": [
+          "msg-pg-1",
+          "msg-pg-2"
+        ],
+        "precision": 1,
+        "recall": 1,
+        "emptySignalMatched": true,
+        "notes": "Precision: 1, Recall: 1"
+      },
+      {
+        "id": "mem-16",
+        "title": "Empty Memory Date Signal (Unrecorded Date November 1, 2026)",
+        "passed": true,
+        "retrievedIds": [],
+        "precision": 0,
+        "recall": 1,
+        "emptySignalMatched": true,
+        "notes": "Precision: 0, Recall: 1"
       }
     ],
     "passRate": 100,
-    "total": 12,
-    "passed": 12,
-    "overallPrecision": 0.55,
+    "total": 16,
+    "passed": 16,
+    "overallPrecision": 0.56,
     "overallRecall": 1,
     "unsupportedClaimRate": 0
   },
@@ -948,21 +1006,21 @@
         "description": "Basic Question (No Search, No Memory)",
         "iterations": 10,
         "ttfe": {
-          "p50": 0.09,
-          "p95": 0.17,
-          "p99": 0.2,
-          "min": 0.07,
-          "max": 0.21,
-          "avg": 0.1,
+          "p50": 0.08,
+          "p95": 0.13,
+          "p99": 0.15,
+          "min": 0.08,
+          "max": 0.15,
+          "avg": 0.09,
           "count": 10
         },
         "ttft": {
-          "p50": 0.09,
-          "p95": 0.17,
-          "p99": 0.2,
-          "min": 0.07,
-          "max": 0.21,
-          "avg": 0.1,
+          "p50": 0.08,
+          "p95": 0.13,
+          "p99": 0.15,
+          "min": 0.08,
+          "max": 0.15,
+          "avg": 0.09,
           "count": 10
         },
         "memory": {
@@ -985,10 +1043,10 @@
         },
         "total": {
           "p50": 0.09,
-          "p95": 0.2,
-          "p99": 0.22,
+          "p95": 0.18,
+          "p99": 0.18,
           "min": 0.08,
-          "max": 0.22,
+          "max": 0.18,
           "avg": 0.11,
           "count": 10
         }
@@ -998,21 +1056,21 @@
         "description": "Memory Retrieval Query",
         "iterations": 10,
         "ttfe": {
-          "p50": 0.11,
-          "p95": 0.14,
-          "p99": 0.14,
+          "p50": 0.09,
+          "p95": 0.15,
+          "p99": 0.17,
           "min": 0.08,
-          "max": 0.14,
-          "avg": 0.11,
+          "max": 0.18,
+          "avg": 0.1,
           "count": 10
         },
         "ttft": {
-          "p50": 0.11,
-          "p95": 0.14,
-          "p99": 0.14,
+          "p50": 0.09,
+          "p95": 0.15,
+          "p99": 0.17,
           "min": 0.08,
-          "max": 0.14,
-          "avg": 0.11,
+          "max": 0.18,
+          "avg": 0.1,
           "count": 10
         },
         "memory": {
@@ -1034,11 +1092,11 @@
           "count": 10
         },
         "total": {
-          "p50": 0.11,
-          "p95": 0.14,
-          "p99": 0.15,
-          "min": 0.09,
-          "max": 0.15,
+          "p50": 0.1,
+          "p95": 0.16,
+          "p99": 0.18,
+          "min": 0.08,
+          "max": 0.19,
           "avg": 0.11,
           "count": 10
         }
@@ -1048,21 +1106,21 @@
         "description": "Live Web Search Query",
         "iterations": 10,
         "ttfe": {
-          "p50": 0.1,
-          "p95": 0.17,
-          "p99": 0.18,
+          "p50": 0.08,
+          "p95": 0.1,
+          "p99": 0.11,
           "min": 0.08,
-          "max": 0.18,
-          "avg": 0.11,
+          "max": 0.11,
+          "avg": 0.09,
           "count": 10
         },
         "ttft": {
-          "p50": 0.12,
-          "p95": 0.2,
-          "p99": 0.23,
+          "p50": 0.1,
+          "p95": 0.16,
+          "p99": 0.18,
           "min": 0.09,
-          "max": 0.24,
-          "avg": 0.13,
+          "max": 0.18,
+          "avg": 0.12,
           "count": 10
         },
         "memory": {
@@ -1084,12 +1142,12 @@
           "count": 10
         },
         "total": {
-          "p50": 0.12,
-          "p95": 0.21,
-          "p99": 0.24,
+          "p50": 0.11,
+          "p95": 0.17,
+          "p99": 0.19,
           "min": 0.1,
-          "max": 0.25,
-          "avg": 0.13,
+          "max": 0.19,
+          "avg": 0.12,
           "count": 10
         }
       },
@@ -1098,21 +1156,21 @@
         "description": "Combined Memory + Search Query",
         "iterations": 10,
         "ttfe": {
-          "p50": 0.08,
-          "p95": 0.1,
-          "p99": 0.1,
+          "p50": 0.09,
+          "p95": 0.13,
+          "p99": 0.14,
           "min": 0.08,
-          "max": 0.1,
-          "avg": 0.08,
+          "max": 0.14,
+          "avg": 0.1,
           "count": 10
         },
         "ttft": {
-          "p50": 0.09,
-          "p95": 0.12,
-          "p99": 0.12,
-          "min": 0.09,
-          "max": 0.12,
-          "avg": 0.1,
+          "p50": 0.1,
+          "p95": 0.15,
+          "p99": 0.16,
+          "min": 0.1,
+          "max": 0.16,
+          "avg": 0.11,
           "count": 10
         },
         "memory": {
@@ -1134,12 +1192,12 @@
           "count": 10
         },
         "total": {
-          "p50": 0.1,
-          "p95": 0.12,
-          "p99": 0.12,
+          "p50": 0.12,
+          "p95": 0.16,
+          "p99": 0.17,
           "min": 0.1,
-          "max": 0.12,
-          "avg": 0.1,
+          "max": 0.17,
+          "avg": 0.12,
           "count": 10
         }
       },
@@ -1150,18 +1208,18 @@
         "ttfe": {
           "p50": 0.08,
           "p95": 0.12,
-          "p99": 0.12,
+          "p99": 0.14,
           "min": 0.07,
-          "max": 0.12,
+          "max": 0.14,
           "avg": 0.09,
           "count": 10
         },
         "ttft": {
           "p50": 0.08,
           "p95": 0.12,
-          "p99": 0.12,
+          "p99": 0.14,
           "min": 0.08,
-          "max": 0.12,
+          "max": 0.14,
           "avg": 0.09,
           "count": 10
         },
@@ -1184,11 +1242,11 @@
           "count": 10
         },
         "total": {
-          "p50": 0.09,
-          "p95": 0.12,
-          "p99": 0.12,
+          "p50": 0.08,
+          "p95": 0.13,
+          "p99": 0.15,
           "min": 0.08,
-          "max": 0.12,
+          "max": 0.15,
           "avg": 0.09,
           "count": 10
         }
@@ -1196,10 +1254,10 @@
     ],
     "overallTotalLatency": {
       "p50": 0.1,
-      "p95": 0.17,
-      "p99": 0.24,
+      "p95": 0.18,
+      "p99": 0.19,
       "min": 0.08,
-      "max": 0.25,
+      "max": 0.19,
       "avg": 0.11,
       "count": 50
     }

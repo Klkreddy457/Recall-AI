@@ -6,6 +6,7 @@ import { retrieve } from '../services/memory/retrieval.js';
 import type { MemoryRetrievalResult } from '../services/memory/types.js';
 import { ContextBuilder } from './context.js';
 import { validateAndStripCitations, buildSourceCards } from './citations.js';
+import { extractValidJsonObject, normalizeSearchQuery } from './jsonSanitizer.js';
 
 export interface TurnTimings {
   totalMs: number;
@@ -177,6 +178,9 @@ export class AgentOrchestrator {
 
       activeToolCall = streamResult.value.toolCall;
 
+      // In-turn search cache to deduplicate searches in the same turn (Bug D)
+      const inTurnSearchCache = new Map<string, SearchResult[]>();
+
       // Step 4: Handle Tool Call (Decision 1 & 3: Exactly one tool web_search, max 1 search per turn)
       if (activeToolCall && activeToolCall.name === 'web_search') {
         searchCallCount++;
@@ -191,14 +195,15 @@ export class AgentOrchestrator {
           };
           messages.push(toolErrorMessage);
         } else {
+          // Robust JSON argument extraction and sanitization (Bug E)
+          const fallbackArgs = { query: params.query };
+          const { parsed: parsedArgs, cleanString: cleanToolArguments } = extractValidJsonObject<{
+            query?: string;
+          }>(activeToolCall.arguments, fallbackArgs);
+
           let searchQuery = params.query;
-          try {
-            const parsedArgs = JSON.parse(activeToolCall.arguments) as { query?: string };
-            if (parsedArgs.query && typeof parsedArgs.query === 'string') {
-              searchQuery = parsedArgs.query.trim();
-            }
-          } catch {
-            // Keep default query if JSON parse fails
+          if (parsedArgs.query && typeof parsedArgs.query === 'string' && parsedArgs.query.trim().length > 0) {
+            searchQuery = parsedArgs.query.trim();
           }
 
           recordFirstEvent();
@@ -208,7 +213,16 @@ export class AgentOrchestrator {
           let searchToolContent: string;
 
           try {
-            searchResults = await this.searchClient.search(searchQuery, params.signal);
+            const normalizedQuery = normalizeSearchQuery(searchQuery);
+
+            if (inTurnSearchCache.has(normalizedQuery)) {
+              // Deduplicated in-turn search hit
+              searchResults = inTurnSearchCache.get(normalizedQuery)!;
+            } else {
+              searchResults = await this.searchClient.search(searchQuery, params.signal);
+              inTurnSearchCache.set(normalizedQuery, searchResults);
+            }
+
             sources = buildSourceCards(searchResults);
 
             if (sources.length > 0) {
@@ -230,6 +244,7 @@ export class AgentOrchestrator {
           }
 
           // Append assistant tool call and tool response to conversation
+          // Guaranteed: cleanToolArguments is strictly valid JSON, eliminating Groq 400 template errors
           const assistantToolCallMsg: ChatMessage = {
             role: 'assistant',
             content: '',
@@ -239,7 +254,7 @@ export class AgentOrchestrator {
                 type: 'function',
                 function: {
                   name: activeToolCall.name,
-                  arguments: activeToolCall.arguments,
+                  arguments: cleanToolArguments,
                 },
               },
             ],
@@ -264,6 +279,32 @@ export class AgentOrchestrator {
           while (!secondResult.done) {
             yield secondResult.value;
             secondResult = await secondStream.next();
+          }
+
+          // Guard against model attempting another tool call in second turn
+          const secondToolCall = secondResult.value.toolCall;
+          if (secondToolCall && secondToolCall.name === 'web_search') {
+            searchCallCount++;
+            messages.push({
+              role: 'assistant',
+              content: '',
+              tool_calls: [
+                {
+                  id: secondToolCall.id,
+                  type: 'function',
+                  function: {
+                    name: secondToolCall.name,
+                    arguments: JSON.stringify({ query: '' }),
+                  },
+                },
+              ],
+            });
+            messages.push({
+              role: 'tool',
+              tool_call_id: secondToolCall.id,
+              name: 'web_search',
+              content: 'Error: Maximum of 1 web search allowed per turn.',
+            });
           }
         }
       }

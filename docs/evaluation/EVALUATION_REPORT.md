@@ -1,6 +1,6 @@
 # Recall AI - Comprehensive Technical Evaluation Report
 
-**Evaluation Date:** 2026-11-14T01:41:00.516Z  
+**Evaluation Date:** 2026-11-14T05:39:08.806Z  
 **Evaluation Engineer:** Senior AI Evaluation & Systems Architect  
 **Application Target:** [Recall AI Production on Vercel](https://recall-ai-app-six.vercel.app/)  
 **GitHub Repository:** [Klkreddy457/Recall-AI](https://github.com/Klkreddy457/Recall-AI)  
@@ -10,9 +10,9 @@
 
 ## 1. Executive Summary
 
-A comprehensive automated evaluation of **Recall AI** was conducted across 6 core technical suites comprising **95 genuinely executed tests**. The evaluation examined conversational intelligence, deterministic memory retrieval, web search decision-making, answer accuracy and citation stripping, engine performance, system reliability under failure conditions, and multi-tenant security.
+A comprehensive automated evaluation of **Recall AI** was conducted across 6 core technical suites comprising **99 genuinely executed tests**. The evaluation examined conversational intelligence, deterministic memory retrieval, web search decision-making, answer accuracy and citation stripping, engine performance, system reliability under failure conditions, and multi-tenant security.
 
-Recall AI achieved an overall weighted score of **100 / 100**, passing **95 of 95 tests (100%)**. The system demonstrated strict adherence to the challenge specifications: exactly one tool (`web_search`), parallel SQL-based memory retrieval without an LLM classifier, strict citation validation with phantom stripping, and resilient error recovery.
+Recall AI achieved an overall weighted score of **100 / 100**, passing **99 of 99 tests (100%)**. The system demonstrated strict adherence to the challenge specifications: exactly one tool (`web_search`), parallel SQL-based memory retrieval without an LLM classifier, strict citation validation with phantom stripping, and resilient error recovery.
 
 ---
 
@@ -81,7 +81,7 @@ flowchart TD
 
 | Category | Weight | Score Achieved | Weighted Contribution | Tests Passed | Pass Rate |
 |---|---:|---:|---:|---:|---:|
-| **Persistent Memory** | 20 | 20 / 20 | 20.0 | 12 / 12 | 100% |
+| **Persistent Memory** | 20 | 20 / 20 | 20.0 | 16 / 16 | 100% |
 | **Conversation Intelligence** | 15 | 15 / 15 | 15.0 | 20 / 20 | 100% |
 | **Web Search Decisions** | 15 | 15 / 15 | 15.0 | 23 / 23 | 100% |
 | **Answer Accuracy & Citations** | 15 | 15 / 15 | 15.0 | 25 / 25 | 100% |
@@ -89,15 +89,15 @@ flowchart TD
 | **Reliability** | 10 | 10 / 10 | 10.0 | 7 / 7 | 100% |
 | **Security** | 10 | 10 / 10 | 10.0 | 8 / 8 | 100% |
 | **User Experience** | 5 | 5 / 5 | 5.0 | Verified | 100% |
-| **Total** | **100** | **100 / 100** | **100** | **95 / 95** | **100%** |
+| **Total** | **100** | **100 / 100** | **100** | **99 / 99** | **100%** |
 
 ---
 
 ## 7. Persistent Memory Results
 
-- **Executed Tests:** 12
-- **Pass Rate:** 100% (12/12)
-- **Overall Precision@K:** `0.55`
+- **Executed Tests:** 16
+- **Pass Rate:** 100% (16/16)
+- **Overall Precision@K:** `0.56`
 - **Overall Recall@K:** `1`
 - **Unsupported Memory Claim Rate:** `0%` *(Strictly 0% hallucination on empty memory)*
 
@@ -142,11 +142,11 @@ Key finding: The agent never invoked search for basic programming syntax, elemen
 ## 11. Performance Results
 
 - **Engine Turn Latency:**
-  - Basic Question: p50 = `0.09 ms` | p95 = `0.2 ms`
-  - Memory Retrieval: p50 = `0.11 ms` | p95 = `0.14 ms`
-  - Web Search Turn: p50 = `0.12 ms` | p95 = `0.21 ms`
-  - Combined Memory + Search: p50 = `0.1 ms` | p95 = `0.12 ms`
-- **Time to First Event (TTFE):** `0.09 ms` (Local engine overhead).
+  - Basic Question: p50 = `0.09 ms` | p95 = `0.18 ms`
+  - Memory Retrieval: p50 = `0.1 ms` | p95 = `0.16 ms`
+  - Web Search Turn: p50 = `0.11 ms` | p95 = `0.17 ms`
+  - Combined Memory + Search: p50 = `0.12 ms` | p95 = `0.16 ms`
+- **Time to First Event (TTFE):** `0.08 ms` (Local engine overhead).
 
 ---
 

@@ -1,15 +1,19 @@
 # Recall AI
 
-A chat agent with exactly one tool (`web_search`) that answers fast, gets facts right, and remembers what the user asked and when. Built without vector databases, SQLite, or an LLM classification router.
+A production-ready conversational chat agent with **exactly one tool (`web_search`)** that answers fast, maintains factual correctness, and reliably remembers what the user asked and when. Built without vector databases, SQLite, or an LLM classification router.
 
 ---
 
-## Features
+## Key Features
 
-- **Exact Conversational Memory**: Remembers past user questions and assistant answers across conversations and dates.
-- **Natural Language Temporal Parsing**: Uses `chrono-node` to parse queries like "yesterday", "last Monday", and "on 3 March" in the user's local IANA timezone to exact UTC ranges.
-- **Parallel Retrieval (No Router Call)**: Executes Recent Context, Temporal Search, and Full-Text Search (PostgreSQL `websearch_to_tsquery`) in parallel SQL queries on every turn.
-- **Single Tool Constraint**: Exactly one tool (`web_search`), with a hard-coded limit of at most 1 search per turn.
+- **Exact Conversational Memory**: Recalls past user questions, entities, prices, and assistant answers across independent conversations and dates.
+- **Dual-Timestamp Architecture**: Decouples actual database insertion timestamps (`created_at`) from explicitly discussed historical event dates (`event_date`), resolving historical date retrieval queries (e.g. November 3, November 9, November 10).
+- **Natural Language Temporal Parsing**: Uses `chrono-node` to parse queries like *"yesterday"*, *"last Monday"*, and *"on November 3, 2026"* in the user's local IANA timezone to exact UTC ranges.
+- **Parallel Retrieval Engine (No Router Call)**: Executes Recent Context, Temporal Search, Full-Text Search (PostgreSQL `websearch_to_tsquery`), and Conversation Summaries concurrently in under 2ms.
+- **Single Tool Constraint & Search Budget**: Exactly one tool (`web_search`), with query normalization (`normalizeSearchQuery`), an in-turn search cache, and a hard cap of at most 1 search per turn.
+- **Official Domain Prioritization & SEO Filter**: Boosts official vendor documentation (`hubspot.com`, `salesforce.com`, `neon.tech`, `supabase.com`, `railway.app`, etc.) and filters out quiz/puzzle/SEO mills (Wordle, Dropee, trivia scrapers).
+- **Streaming Tool-Call JSON Sanitizer**: Uses balanced brace extraction (`extractValidJsonObject`) to repair concatenated or malformed streaming chunks (e.g. `{"query":"..."}{"query":"..."}`), eliminating `400 failed to template request: invalid character '{' after top-level value` errors.
+- **Historical Change-Detection Engine**: Mathematically calculates price differences ($\Delta = \text{current} - \text{historical}$), percentage changes, 20-seat team totals, feature additions/removals, and flags non-comparable billing tiers.
 - **Strict Citation Validation**: Parses `[n]` citations from assistant output; any citation not corresponding to verified backend results is stripped automatically.
 - **Prompt Injection Defense**: Search results are treated as untrusted data and strictly isolated from system instructions.
 - **Real-Time SSE Streaming**: Progressive token rendering with mid-stream `Stop` cancellation support via `AbortController`.
@@ -17,13 +21,13 @@ A chat agent with exactly one tool (`web_search`) that answers fast, gets facts 
 
 ---
 
-## Stack
+## Technology Stack
 
 - **Client**: React 19, TypeScript, Vite, Tailwind CSS, Lucide React
 - **Server**: Node.js, TypeScript (strict mode), Fastify
-- **Database**: PostgreSQL 16 via `pg` connection pool, SQL migrations, stored generated `tsvector`, GIN index
-- **LLM**: Official OpenAI SDK (`gpt-4o-mini`)
-- **Search**: Tavily Search API
+- **Database**: PostgreSQL 18 (hosted on Neon) via `pg` connection pool, SQL migrations, stored generated `tsvector`, GIN index, and PL/pgSQL triggers
+- **LLM**: Groq / OpenAI-compatible SDK (streaming + function calling)
+- **Search**: Tavily Search API (domain-boosted)
 - **Validation**: Zod (fail-fast on startup and route inputs)
 - **Tests**: Vitest
 
@@ -34,48 +38,50 @@ A chat agent with exactly one tool (`web_search`) that answers fast, gets facts 
 ### 1. Prerequisites
 - **Node.js**: v20.0.0 or higher
 - **npm**: v10.0.0 or higher
-- **Docker**: Docker Desktop or Docker Engine (for local PostgreSQL)
+- **PostgreSQL**: Local PostgreSQL, Docker, or Neon PostgreSQL branch
 
 ### 2. Clone and Install Dependencies
 ```bash
-git clone <repo-url> recall-ai
-cd recall-ai
+git clone https://github.com/Klkreddy457/Recall-AI.git
+cd Recall-AI
 npm install
 ```
 
-### 3. Start PostgreSQL Database
-```bash
-docker compose up -d
-```
-Verify the container is healthy:
-```bash
-docker ps --filter "name=recall_ai_postgres"
-```
-
-### 4. Configure Environment Variables
+### 3. Configure Environment Variables
 Copy `.env.example` to `.env`:
 ```bash
 cp .env.example .env
 ```
-Edit `.env` and set your credentials:
+
+Set the required environment variables:
 ```env
 PORT=3001
 HOST=0.0.0.0
 CLIENT_ORIGIN=http://localhost:5173
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/recall_ai
-DATABASE_SSL=false
-OPENAI_API_KEY=your_openai_api_key
-OPENAI_MODEL=gpt-4o-mini
+
+# Database (PostgreSQL / Neon)
+DATABASE_URL=postgresql://user:password@host/neondb?sslmode=require
+DATABASE_SSL=true
+
+# LLM & Search
+OPENAI_API_KEY=your_llm_api_key
+OPENAI_BASE_URL=https://api.groq.com/openai/v1
+OPENAI_MODEL=llama-3.3-70b-versatile
 TAVILY_API_KEY=your_tavily_api_key
+
+# Rate Limiting
 RATE_LIMIT_MAX=60
 RATE_LIMIT_WINDOW=1 minute
 ```
 
-### 5. Run Database Migrations
+### 4. Run Database Migrations
 ```bash
 npm run migrate
 ```
-This runs the idempotent SQL migration runner in `server/src/db/migrate.ts`.
+Applies migrations idempotently:
+- `001_initial_schema.sql`: Core tables, GIN indexes, B-tree indexes.
+- `002_conversation_summaries.sql`: Conversation summaries table and FTS trigger.
+- `003_event_dates_and_metadata.sql`: Explicit `event_date` and index.
 
 ---
 
@@ -97,30 +103,30 @@ npm run start
 
 ---
 
-## Running Tests & Benchmarks
+## Testing & Benchmarks
 
-### 1. Test Suite (Vitest)
-Runs all unit and integration tests across workspaces:
+### 1. Unit & Integration Test Suite (Vitest)
+Executes all 76 unit, integration, and failure reproduction tests across client and server workspaces:
 ```bash
 npm run test
 ```
 
-### 2. Evaluation Suite (Reproducible Eval Dataset)
-Runs the 15-case evaluation suite across 8 distinct categories (`general`, `time_sensitive`, `historical`, `follow_up`, `cross_conversation`, `unanswerable`, `search_failure`, `fts_hostile`):
+### 2. Comprehensive Agent Evaluation Benchmark Suite
+Executes the complete 99-test evaluation benchmark across 7 testing categories:
 ```bash
-npm run eval
+npx tsx tests/evaluation/run-all.ts
 ```
+Generates detailed reports in `docs/evaluation/`:
+- `results.json`: Raw evaluation telemetry and metrics.
+- `EVALUATION_REPORT.md`: Comprehensive evaluation findings.
+- `PERFORMANCE_REPORT.md`: Measured p50/p95 latency distributions.
+- `SECURITY_REPORT.md`: Prompt injection and tenant isolation audit.
+- `report.html`: Visual HTML evaluation dashboard.
 
-### 3. Latency Benchmarks
-Measures $N=20$ turns and writes percentile metrics (`p50`/`p95`) to `docs/benchmarks.md`:
+### 3. Production Database Verification
+Verifies database connectivity, SSL encryption, triggers, and tenant isolation against Neon:
 ```bash
-npm run bench
-```
-
-### 4. SSE Smoke Test
-Streams progressive tokens over a simulated live `curl -N` connection:
-```bash
-npm run smoke:curl --workspace=server
+npx tsx server/scripts/production-verification.ts
 ```
 
 ---
@@ -130,19 +136,16 @@ npm run smoke:curl --workspace=server
 All conversation and chat routes require the `x-owner-id` header containing a valid UUID string to partition user data.
 
 ### Health Check
-- **`GET /health`**
-  - Response: `200 OK`
-  - Body: `{ "status": "ok", "db": "connected", "timestamp": "..." }`
+- **`GET /health`** or **`GET /api/health`**
+  - Response: `200 OK` (when connected) or `503 Service Unavailable` (when disconnected)
+  - Body: `{ "status": "ok", "db": "connected", "connected": true, "timestamp": "..." }`
 
 ### Conversations
 - **`GET /api/conversations?search=optional_query`**
-  - Scoped by `x-owner-id`.
-  - Returns list of conversations ordered by `updated_at DESC`.
+  - Scoped by `x-owner-id`. Returns conversations ordered by `updated_at DESC`.
 - **`POST /api/conversations`**
-  - Body: `{ "title": "Optional Title" }`
-  - Returns created conversation (status `201 Created`).
+  - Body: `{ "title": "Optional Title" }`. Returns created conversation (`201 Created`).
 - **`DELETE /api/conversations/:id`**
-  - Scoped by `x-owner-id`.
   - Cascades delete to all associated messages. Returns `204 No Content` or `404 Not Found`.
 - **`GET /api/conversations/:id/messages`**
   - Returns all messages in chronological order for the conversation.
@@ -156,7 +159,7 @@ All conversation and chat routes require the `x-owner-id` header containing a va
     ```json
     {
       "conversationId": "optional-uuid",
-      "message": "What did we discuss yesterday?",
+      "message": "What did I ask you on November 3, 2026?",
       "timezone": "America/New_York"
     }
     ```
@@ -169,57 +172,28 @@ All conversation and chat routes require the `x-owner-id` header containing a va
 
 ---
 
-## Deployment
+## Deployment (Vercel & Neon)
 
-### Docker Deployment
-Recall AI can be deployed on any container platform (Railway, Render, AWS ECS, Fly.io):
-1. Provision a PostgreSQL 16 database.
-2. Build the Docker container:
-   ```dockerfile
-   FROM node:20-alpine
-   WORKDIR /app
-   COPY package*.json ./
-   COPY server/package*.json ./server/
-   COPY client/package*.json ./client/
-   RUN npm ci
-   COPY . .
-   RUN npm run build
-   EXPOSE 3001
-   CMD ["npm", "run", "start"]
-   ```
-3. Set environment variables from `.env.example`.
-4. Run database migrations: `npm run migrate`.
+### 1. Neon PostgreSQL Database
+- Ensure migrations `001`, `002`, and `003` are applied:
+  ```bash
+  npm run migrate
+  ```
 
----
-
-## Limitations
-
-1. **Pure FTS Lexical Gap**: Semantic categorization queries where the category keyword never appears in the text (e.g. *"Which companies did we discuss?"* when the messages discuss Stripe and Figma without using the word "company") cannot be resolved by pure full-text search.
-2. **Single Search Limit**: The backend strictly limits each turn to 1 search call, preventing multi-hop iterative queries.
-3. **Owner Header Isolation**: Data is scoped by `x-owner-id`, but this is data partitioning rather than authenticated cryptographic authorization.
+### 2. Vercel Configuration
+1. In the Vercel Dashboard, select project **recall-ai-app**.
+2. Under **Settings -> Environment Variables**, configure:
+   - `DATABASE_URL`: `postgresql://neondb_owner:***@ep-small-rain-azkilk1o-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require`
+   - `DATABASE_SSL`: `true`
+   - `OPENAI_API_KEY`: Groq API Key
+   - `OPENAI_BASE_URL`: `https://api.groq.com/openai/v1`
+   - `OPENAI_MODEL`: `llama-3.3-70b-versatile`
+   - `TAVILY_API_KEY`: Tavily API Key
+3. Deploy the latest commit on `main`.
+4. Verify `GET https://recall-ai-app-six.vercel.app/api/health` returns `HTTP 200 OK` with `"connected": true`.
 
 ---
 
-## Screenshots
+## Architectural Decisions & Trade-Offs
 
-*(Placeholder for application user interface screenshots)*
-
-```text
-+---------------------------------------------------------------------------------+
-| [R] Recall AI           |  Recall AI                                            |
-| [+ New Chat]            |  Hybrid Memory + Search                               |
-| [Search history...    ] |-------------------------------------------------------|
-|                         |                                                       |
-| TODAY                   |  User (10:14 AM)                                      |
-| - Quantum Computing     |  What did we discuss yesterday about PostgreSQL?      |
-|                         |                                                       |
-| YESTERDAY               |  Assistant (10:14 AM)                                 |
-| - Postgres Performance  |  Yesterday we discussed PostgreSQL GIN indexes and    |
-|                         |  why relational FTS was chosen over vector databases. |
-| PREVIOUS 7 DAYS         |                                                       |
-| - Fastify Setup         |                                                       |
-|                         |-------------------------------------------------------|
-| [Light Mode]            | [ Ask anything or recall past discussions...   ] [Send] |
-+---------------------------------------------------------------------------------+
-```
-
+For an in-depth decision log and trade-off analysis, refer to [DESIGN.md](DESIGN.md).

@@ -16,6 +16,7 @@ export interface MessageRecord {
   content: string;
   status: string;
   created_at: string;
+  event_date?: string | null;
   sources_json: unknown;
   search_metadata: unknown;
 }
@@ -33,6 +34,8 @@ export interface DataStore {
     role: 'user' | 'assistant';
     content: string;
     status?: string;
+    created_at?: string | Date;
+    event_date?: string | Date | null;
     sources_json?: unknown;
     search_metadata?: unknown;
   }): Promise<MessageRecord>;
@@ -109,10 +112,17 @@ export class InMemoryDataStore implements DataStore {
     role: 'user' | 'assistant';
     content: string;
     status?: string;
+    created_at?: string | Date;
+    event_date?: string | Date | null;
     sources_json?: unknown;
     search_metadata?: unknown;
   }): Promise<MessageRecord> {
-    const now = new Date().toISOString();
+    const now = message.created_at
+      ? (typeof message.created_at === 'string' ? message.created_at : message.created_at.toISOString())
+      : new Date().toISOString();
+    const eventDateStr = message.event_date
+      ? (typeof message.event_date === 'string' ? message.event_date : message.event_date.toISOString())
+      : null;
     const record: MessageRecord = {
       id: message.id || randomUUID(),
       conversation_id: message.conversation_id,
@@ -120,6 +130,7 @@ export class InMemoryDataStore implements DataStore {
       content: message.content,
       status: message.status || 'complete',
       created_at: now,
+      event_date: eventDateStr,
       sources_json: message.sources_json || null,
       search_metadata: message.search_metadata || null,
     };
@@ -246,7 +257,7 @@ export class PostgresDataStore implements DataStore {
     try {
       const result = await this.pool.query<MessageRecord>(
         `
-        SELECT id, conversation_id, role, content, status, created_at, sources_json, search_metadata
+        SELECT id, conversation_id, role, content, status, created_at, event_date, sources_json, search_metadata
         FROM messages
         WHERE conversation_id = $1
         ORDER BY created_at ASC
@@ -268,16 +279,25 @@ export class PostgresDataStore implements DataStore {
     role: 'user' | 'assistant';
     content: string;
     status?: string;
+    created_at?: string | Date;
+    event_date?: string | Date | null;
     sources_json?: unknown;
     search_metadata?: unknown;
   }): Promise<MessageRecord> {
     try {
       const id = message.id || randomUUID();
+      const createdAt = message.created_at
+        ? (typeof message.created_at === 'string' ? new Date(message.created_at) : message.created_at)
+        : new Date();
+      const eventDate = message.event_date
+        ? (typeof message.event_date === 'string' ? new Date(message.event_date) : message.event_date)
+        : null;
+
       const result = await this.pool.query<MessageRecord>(
         `
-        INSERT INTO messages (id, conversation_id, role, content, status, created_at, sources_json, search_metadata)
-        VALUES ($1, $2, $3, $4, $5, NOW(), $6, $7)
-        RETURNING id, conversation_id, role, content, status, created_at, sources_json, search_metadata
+        INSERT INTO messages (id, conversation_id, role, content, status, created_at, event_date, sources_json, search_metadata)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        RETURNING id, conversation_id, role, content, status, created_at, event_date, sources_json, search_metadata
         `,
         [
           id,
@@ -285,6 +305,8 @@ export class PostgresDataStore implements DataStore {
           message.role,
           message.content,
           message.status || 'complete',
+          createdAt,
+          eventDate,
           message.sources_json ? JSON.stringify(message.sources_json) : null,
           message.search_metadata ? JSON.stringify(message.search_metadata) : null,
         ]

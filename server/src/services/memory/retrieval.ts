@@ -8,6 +8,7 @@ import type {
   QAPair,
   TemporalRetrievalResult,
   TemporalConversationGroup,
+  ConversationSummaryHit,
 } from './types.js';
 
 export function extractFtsSearchTerms(query: string): string {
@@ -57,7 +58,7 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
 
       const result = await pool.query<MessageRecord>(
         `
-        SELECT m.id, m.conversation_id, m.role, m.content, m.status, m.created_at,
+        SELECT m.id, m.conversation_id, m.role, m.content, m.status, m.created_at, m.event_date,
                m.sources_json, m.search_metadata, c.title as conversation_title
         FROM messages m
         JOIN conversations c ON c.id = m.conversation_id
@@ -89,6 +90,7 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
         user_content: string;
         user_status: string | null;
         user_created_at: Date;
+        user_event_date: Date | null;
         user_sources_json: unknown;
         user_search_metadata: unknown;
         conversation_title: string | null;
@@ -97,38 +99,46 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
         assistant_content: string | null;
         assistant_status: string | null;
         assistant_created_at: Date | null;
+        assistant_event_date: Date | null;
         assistant_sources_json: unknown;
         assistant_search_metadata: unknown;
       }>(
         `
         WITH user_msgs AS (
-          SELECT m.id, m.conversation_id, m.role, m.content, m.status, m.created_at,
+          SELECT m.id, m.conversation_id, m.role, m.content, m.status, m.created_at, m.event_date,
                  m.sources_json, m.search_metadata, c.title as conversation_title
           FROM messages m
           JOIN conversations c ON c.id = m.conversation_id
           WHERE c.owner_id = $1
             AND m.role = 'user'
-            AND m.created_at >= $2
-            AND m.created_at < $3
-          ORDER BY m.created_at ASC
+            AND (
+              (m.created_at >= $2 AND m.created_at < $3)
+              OR
+              (m.event_date IS NOT NULL AND m.event_date >= $2 AND m.event_date < $3)
+            )
+          ORDER BY COALESCE(m.event_date, m.created_at) ASC
         )
         SELECT u.id as user_id, u.conversation_id, u.role as user_role, u.content as user_content,
-               u.status as user_status, u.created_at as user_created_at, u.sources_json as user_sources_json,
-               u.search_metadata as user_search_metadata, u.conversation_title,
+               u.status as user_status, u.created_at as user_created_at, u.event_date as user_event_date,
+               u.sources_json as user_sources_json, u.search_metadata as user_search_metadata, u.conversation_title,
                a.id as assistant_id, a.role as assistant_role, a.content as assistant_content,
-               a.status as assistant_status, a.created_at as assistant_created_at,
+               a.status as assistant_status, a.created_at as assistant_created_at, a.event_date as assistant_event_date,
                a.sources_json as assistant_sources_json, a.search_metadata as assistant_search_metadata
         FROM user_msgs u
         LEFT JOIN LATERAL (
-          SELECT m.id, m.role, m.content, m.status, m.created_at, m.sources_json, m.search_metadata
+          SELECT m.id, m.role, m.content, m.status, m.created_at, m.event_date, m.sources_json, m.search_metadata
           FROM messages m
           WHERE m.conversation_id = u.conversation_id
             AND m.role = 'assistant'
-            AND m.created_at >= u.created_at
+            AND (
+              m.created_at >= u.created_at
+              OR
+              (m.event_date IS NOT NULL AND u.event_date IS NOT NULL AND m.event_date >= u.event_date)
+            )
           ORDER BY m.created_at ASC
           LIMIT 1
         ) a ON true
-        ORDER BY u.created_at ASC
+        ORDER BY COALESCE(u.event_date, u.created_at) ASC
         `,
         [ownerId, dateRange.start, dateRange.end]
       );
@@ -148,6 +158,7 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
           content: row.user_content,
           status: row.user_status,
           created_at: row.user_created_at,
+          event_date: row.user_event_date,
           sources_json: row.user_sources_json,
           search_metadata: row.user_search_metadata,
           conversation_title: row.conversation_title,
@@ -162,6 +173,7 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
             content: row.assistant_content!,
             status: row.assistant_status,
             created_at: row.assistant_created_at!,
+            event_date: row.assistant_event_date,
             sources_json: row.assistant_sources_json,
             search_metadata: row.assistant_search_metadata,
             conversation_title: row.conversation_title,
@@ -363,11 +375,61 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
     }
   };
 
-  // Run A, B, C in parallel (Decision 2)
-  const [recentContext, temporal, ftsRaw] = await Promise.all([
+  // D. Conversation Summaries Retrieval (Evidence-Gated for Cross-Conversation & Categorical Synthesis)
+  let summaryMs = 0;
+  const runSummaries = async (): Promise<ConversationSummaryHit[]> => {
+    const start = performance.now();
+    try {
+      const trimmedQuery = query.trim();
+      if (!trimmedQuery) return [];
+      const cleanedTerms = extractFtsSearchTerms(trimmedQuery);
+
+      const result = await pool.query<{
+        conversation_id: string;
+        summary: string;
+        key_entities: string[];
+        conversation_title: string | null;
+        rank: number;
+      }>(
+        `
+        SELECT cs.conversation_id, cs.summary, cs.key_entities, c.title as conversation_title,
+               GREATEST(
+                 ts_rank_cd(cs.summary_tsv, websearch_to_tsquery('english', $2)),
+                 CASE WHEN $3 != '' THEN ts_rank_cd(cs.summary_tsv, plainto_tsquery('english', $3)) ELSE 0 END
+               ) as rank
+        FROM conversation_summaries cs
+        JOIN conversations c ON c.id = cs.conversation_id
+        WHERE c.owner_id = $1
+          AND (
+            cs.summary_tsv @@ websearch_to_tsquery('english', $2)
+            OR ($3 != '' AND cs.summary_tsv @@ plainto_tsquery('english', $3))
+          )
+        ORDER BY rank DESC
+        LIMIT 5
+        `,
+        [ownerId, trimmedQuery, cleanedTerms]
+      );
+
+      return result.rows.map((r) => ({
+        conversationId: r.conversation_id,
+        conversationTitle: r.conversation_title,
+        summary: r.summary,
+        keyEntities: r.key_entities || [],
+        rank: Number(r.rank),
+      }));
+    } catch {
+      return [];
+    } finally {
+      summaryMs = performance.now() - start;
+    }
+  };
+
+  // Run A, B, C, D in parallel (Decision 2 parallel retrieval)
+  const [recentContext, temporal, ftsRaw, summaryHits] = await Promise.all([
     runRecent(),
     runTemporal(),
     runFts(),
+    runSummaries(),
   ]);
 
   // Exclude FTS hits whose user messages or assistant messages are already in recent context A
@@ -379,12 +441,14 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
   );
 
   // Decision 5: Memory-intent cue detection & empty signal
-  const cuePresent = hasMemoryCue(query);
+  // A query expresses memory intent if cue words are present OR if an explicit temporal date was requested
+  const cuePresent = hasMemoryCue(query) || (temporal !== null && temporal.range.text.length > 0);
   const temporalHasHits = temporal !== null && temporal.groups.length > 0;
   const ftsHasHits = fts.length > 0;
+  const summaryHasHits = summaryHits.length > 0;
 
-  // Signal empty memory only when user expressed memory intent and retrieval produced zero matching historical records
-  const memoryEmptySignal = cuePresent && !temporalHasHits && !ftsHasHits;
+  // Signal empty memory when user expressed memory intent and retrieval produced zero matching historical records
+  const memoryEmptySignal = cuePresent && !temporalHasHits && !ftsHasHits && !summaryHasHits;
 
   const totalMs = performance.now() - totalStart;
 
@@ -392,12 +456,14 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
     recentContext,
     temporal,
     fts,
+    summaryHits,
     memoryEmptySignal,
     timings: {
       totalMs: Math.round(totalMs * 100) / 100,
       recentMs: Math.round(recentMs * 100) / 100,
       temporalMs: Math.round(temporalMs * 100) / 100,
       ftsMs: Math.round(ftsMs * 100) / 100,
+      summaryMs: Math.round(summaryMs * 100) / 100,
     },
   };
 }

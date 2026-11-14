@@ -57,8 +57,8 @@ export async function runMemorySuite(): Promise<{
     // Step 1: Detect memory cues
     const cueDetected = hasMemoryCue(query);
 
-    // Step 2: Temporal parsing (with fixed reference date in 2026)
-    const referenceNow = new Date('2026-10-15T12:00:00.000Z');
+    // Step 2: Temporal parsing (with fixed reference date November 14, 2026)
+    const referenceNow = new Date('2026-11-14T10:00:00.000Z');
     const parsedRange = parseTemporalDate(query, c.timezone || 'UTC', referenceNow);
 
     // Step 3: Retrieval execution across seeded conversations
@@ -68,10 +68,14 @@ export async function runMemorySuite(): Promise<{
     const ownerMessages = allMessages.filter((m) => m.ownerId === ownerId);
 
     if (parsedRange) {
-      // Temporal retrieval match
+      // Temporal retrieval match (supporting both created_at and explicit event_date)
       for (const m of ownerMessages) {
         const msgTime = new Date(m.created_at).getTime();
-        if (msgTime >= parsedRange.start.getTime() && msgTime < parsedRange.end.getTime()) {
+        const eventTime = m.event_date ? new Date(m.event_date).getTime() : msgTime;
+        if (
+          (msgTime >= parsedRange.start.getTime() && msgTime < parsedRange.end.getTime()) ||
+          (eventTime >= parsedRange.start.getTime() && eventTime < parsedRange.end.getTime())
+        ) {
           retrieved.push({ id: m.id, content: m.content });
         }
       }

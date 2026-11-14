@@ -5,9 +5,18 @@ export interface MessageRecord {
   content: string;
   status: string | null;
   created_at: Date;
+  event_date?: Date | null;
   sources_json?: unknown;
   search_metadata?: unknown;
   conversation_title?: string | null;
+}
+
+export interface ConversationSummaryHit {
+  conversationId: string;
+  conversationTitle?: string | null;
+  summary: string;
+  keyEntities: string[];
+  rank?: number;
 }
 
 export interface QAPair {
@@ -39,12 +48,14 @@ export interface MemoryRetrievalResult {
   recentContext: MessageRecord[];
   temporal: TemporalRetrievalResult | null;
   fts: QAPair[];
+  summaryHits?: ConversationSummaryHit[];
   memoryEmptySignal: boolean;
   timings: {
     totalMs: number;
     recentMs: number;
     temporalMs: number;
     ftsMs: number;
+    summaryMs?: number;
   };
 }
 

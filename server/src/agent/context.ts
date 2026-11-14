@@ -47,12 +47,14 @@ export class ContextBuilder {
           const title = grp.conversationTitle || 'Untitled Conversation';
           memoryParts.push(`In "${title}":`);
           for (const p of grp.pairs) {
-            const userTime = new Date(p.userMessage.created_at).toLocaleString('en-US', {
+            const rawUserTime = p.userMessage.event_date || p.userMessage.created_at;
+            const userTime = new Date(rawUserTime).toLocaleString('en-US', {
               timeZone: timezone,
             });
             memoryParts.push(`- User (${userTime}): ${p.userMessage.content}`);
             if (p.assistantMessage) {
-              const asstTime = new Date(p.assistantMessage.created_at).toLocaleString('en-US', {
+              const rawAsstTime = p.assistantMessage.event_date || p.assistantMessage.created_at;
+              const asstTime = new Date(rawAsstTime).toLocaleString('en-US', {
                 timeZone: timezone,
               });
               memoryParts.push(`- Assistant (${asstTime}): ${p.assistantMessage.content}`);
@@ -61,7 +63,17 @@ export class ContextBuilder {
         }
       }
 
-      // Priority 2 & 3: Relevant prior questions and answers (FTS)
+      // Priority 2: Relevant conversation summaries (Cross-conversation categorical synthesis)
+      if (memory.summaryHits && memory.summaryHits.length > 0) {
+        memoryParts.push(`### Past Conversation Summaries & Key Topics:`);
+        for (const s of memory.summaryHits) {
+          const title = s.conversationTitle || 'Untitled Conversation';
+          const entities = s.keyEntities.length > 0 ? ` [Entities: ${s.keyEntities.join(', ')}]` : '';
+          memoryParts.push(`In "${title}": ${s.summary}${entities}`);
+        }
+      }
+
+      // Priority 3: Relevant prior questions and answers (FTS)
       if (memory.fts && memory.fts.length > 0) {
         memoryParts.push(`### Relevant Past Topics (Found in History):`);
         for (const p of memory.fts) {

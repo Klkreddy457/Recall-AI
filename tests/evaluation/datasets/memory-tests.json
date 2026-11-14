@@ -101,5 +101,42 @@
     "expectedRelevantIds": ["msg-a-1", "msg-a-3"],
     "expectedContentSubstrings": ["Retrieval-Augmented Generation"],
     "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-13",
+    "title": "Bug A Historical Date Recovery (November 3, 2026)",
+    "query": "What did I ask you on November 3, 2026?",
+    "targetDate": "2026-11-03",
+    "expectedRelevantIds": ["msg-sql-1", "msg-sql-2"],
+    "expectedContentSubstrings": ["PostgreSQL", "MySQL", "scalability", "concurrency"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-14",
+    "title": "Dataset A: 5 CRM Evaluation and Team Pricing (November 9, 2026)",
+    "query": "What were the prices of the CRMs we evaluated on November 9, 2026?",
+    "targetDate": "2026-11-09",
+    "expectedRelevantIds": ["msg-crm-1", "msg-crm-2"],
+    "expectedContentSubstrings": ["HubSpot", "$20", "Salesforce", "$25", "Pipedrive", "$24", "Zoho", "$14", "Freshsales", "$18", "400", "500"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-15",
+    "title": "Dataset B: Managed PostgreSQL Hosting (November 10, 2026)",
+    "query": "What managed PostgreSQL hosting options did we discuss on November 10, 2026?",
+    "targetDate": "2026-11-10",
+    "expectedRelevantIds": ["msg-pg-1", "msg-pg-2"],
+    "expectedContentSubstrings": ["Neon", "$19", "Supabase", "$25", "Railway", "$5"],
+    "requiresEmptySignal": false
+  },
+  {
+    "id": "mem-16",
+    "title": "Empty Memory Date Signal (Unrecorded Date November 1, 2026)",
+    "query": "What did I ask you on November 1, 2026?",
+    "targetDate": "2026-11-01",
+    "expectedRelevantIds": [],
+    "expectedContentSubstrings": ["no matching records", "could not find"],
+    "forbiddenContentSubstrings": ["You asked about"],
+    "requiresEmptySignal": true
   }
 ]
