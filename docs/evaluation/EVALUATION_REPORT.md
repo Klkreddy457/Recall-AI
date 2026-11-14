@@ -1,6 +1,6 @@
 # Recall AI - Comprehensive Technical Evaluation Report
 
-**Evaluation Date:** 2026-11-14T05:39:08.806Z  
+**Evaluation Date:** 2026-11-14T08:21:18.719Z  
 **Evaluation Engineer:** Senior AI Evaluation & Systems Architect  
 **Application Target:** [Recall AI Production on Vercel](https://recall-ai-app-six.vercel.app/)  
 **GitHub Repository:** [Klkreddy457/Recall-AI](https://github.com/Klkreddy457/Recall-AI)  
@@ -142,11 +142,11 @@ Key finding: The agent never invoked search for basic programming syntax, elemen
 ## 11. Performance Results
 
 - **Engine Turn Latency:**
-  - Basic Question: p50 = `0.09 ms` | p95 = `0.18 ms`
-  - Memory Retrieval: p50 = `0.1 ms` | p95 = `0.16 ms`
-  - Web Search Turn: p50 = `0.11 ms` | p95 = `0.17 ms`
-  - Combined Memory + Search: p50 = `0.12 ms` | p95 = `0.16 ms`
-- **Time to First Event (TTFE):** `0.08 ms` (Local engine overhead).
+  - Basic Question: p50 = `0.1 ms` | p95 = `0.22 ms`
+  - Memory Retrieval: p50 = `0.09 ms` | p95 = `0.12 ms`
+  - Web Search Turn: p50 = `0.12 ms` | p95 = `0.16 ms`
+  - Combined Memory + Search: p50 = `0.13 ms` | p95 = `0.18 ms`
+- **Time to First Event (TTFE):** `0.09 ms` (Local engine overhead).
 
 ---
 

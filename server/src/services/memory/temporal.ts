@@ -118,11 +118,22 @@ export function parseTemporalDate(
 
   const s = match.start;
   let sYear = s.get('year') ?? referenceNow.getUTCFullYear();
-  const sMonth = s.get('month') ?? (referenceNow.getUTCMonth() + 1);
-  const sDay = s.get('day') ?? referenceNow.getUTCDate();
+  let sMonth = s.get('month') ?? (referenceNow.getUTCMonth() + 1);
+  let sDay = s.get('day') ?? referenceNow.getUTCDate();
 
-  // Past context adjustment: if no year was explicitly stated and parsed date is in future, adjust back 1 year
-  if (!s.isCertain('year')) {
+  // Past context adjustment:
+  // 1. If weekday was mentioned (e.g. "on Monday", "on Tuesday") without a specific month/day,
+  // and the tentative date is in the future, roll back by 7-day increments to the most recent past weekday!
+  if (s.isCertain('weekday') && !s.isCertain('month') && !s.isCertain('day')) {
+    let tentative = localToUtc(sYear, sMonth, sDay, 0, 0, 0, timeZone);
+    while (tentative.getTime() > referenceNow.getTime()) {
+      tentative = new Date(tentative.getTime() - 7 * 24 * 3600 * 1000);
+      sYear = tentative.getUTCFullYear();
+      sMonth = tentative.getUTCMonth() + 1;
+      sDay = tentative.getUTCDate();
+    }
+  } else if (!s.isCertain('year')) {
+    // 2. If month/day was specified but without an explicit year, and it is in the future, adjust back 1 year
     const tentativeStart = localToUtc(sYear, sMonth, sDay, 0, 0, 0, timeZone);
     if (tentativeStart.getTime() > referenceNow.getTime()) {
       sYear -= 1;

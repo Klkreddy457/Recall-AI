@@ -1,6 +1,6 @@
 # Recall AI - Performance & Latency Benchmark Report
 
-**Generated at:** 2026-11-14T05:39:08.806Z  
+**Generated at:** 2026-11-14T08:21:18.719Z  
 **Target Environment:** Local Engine Runner & Deployed Vercel Edge Runtime  
 **Total Iterations Measured:** 50 turns
 
@@ -8,22 +8,22 @@
 
 | Profile | Workload Description | Iterations | p50 (Median) | p95 | p99 | Min | Max | Avg |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| **A** | Basic Question (No Search, No Memory) | 10 | 0.09 | 0.18 | 0.18 | 0.08 | 0.18 | 0.11 |
-| **B** | Memory Retrieval Query | 10 | 0.1 | 0.16 | 0.18 | 0.08 | 0.19 | 0.11 |
-| **C** | Live Web Search Query | 10 | 0.11 | 0.17 | 0.19 | 0.1 | 0.19 | 0.12 |
-| **D** | Combined Memory + Search Query | 10 | 0.12 | 0.16 | 0.17 | 0.1 | 0.17 | 0.12 |
-| **E** | Long Conversation Context Query | 10 | 0.08 | 0.13 | 0.15 | 0.08 | 0.15 | 0.09 |
+| **A** | Basic Question (No Search, No Memory) | 10 | 0.1 | 0.22 | 0.23 | 0.08 | 0.23 | 0.12 |
+| **B** | Memory Retrieval Query | 10 | 0.09 | 0.12 | 0.13 | 0.08 | 0.13 | 0.09 |
+| **C** | Live Web Search Query | 10 | 0.12 | 0.16 | 0.16 | 0.1 | 0.16 | 0.12 |
+| **D** | Combined Memory + Search Query | 10 | 0.13 | 0.18 | 0.2 | 0.1 | 0.21 | 0.13 |
+| **E** | Long Conversation Context Query | 10 | 0.1 | 0.17 | 0.19 | 0.08 | 0.2 | 0.11 |
 
 ---
 
 ## 2. Event Dispatch Latency Breakdown (Profile A - Basic Turn)
 
 - **Time-to-First-Event (TTFE):**
-  - p50: `0.08 ms`
-  - p95: `0.13 ms`
+  - p50: `0.09 ms`
+  - p95: `0.16 ms`
 - **Time-to-First-Token (TTFT):**
-  - p50: `0.08 ms`
-  - p95: `0.13 ms`
+  - p50: `0.09 ms`
+  - p95: `0.16 ms`
 
 ---
 
