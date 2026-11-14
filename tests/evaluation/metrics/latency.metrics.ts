@@ -41,3 +41,4 @@ export function computeLatencyDistribution(values: number[]): LatencyDistributio
     count: values.length,
   };
 }
+

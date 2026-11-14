@@ -35,7 +35,7 @@
     "id": "acc-05",
     "category": "stable_factual",
     "question": "What is the speed of light in vacuum in meters per second?",
-    "referenceFact": "Approximately 299,792,458 meters per second.",
+    "referenceFact": "The speed of light in vacuum is exactly 299,792,458 meters per second (often rounded to 300,000 km/s in physics).",
     "expectedKeywords": ["299,792,458", "300,000"],
     "requiresCitation": false
   },
@@ -51,7 +51,7 @@
     "id": "acc-07",
     "category": "technical_explanation",
     "question": "How does PostgreSQL tsvector differ from text?",
-    "referenceFact": "tsvector is a sorted list of distinct normalized lexemes, stripped of stop words and stemmed for rapid lexical indexing.",
+    "referenceFact": "tsvector is a sorted list of distinct normalized lexemes, stripped of stop words and indexed via stemming for rapid lexical retrieval.",
     "expectedKeywords": ["lexeme", "stemming", "sorted", "normalized"],
     "requiresCitation": false
   },
@@ -59,7 +59,7 @@
     "id": "acc-08",
     "category": "technical_explanation",
     "question": "Explain what a deadlock is in database systems.",
-    "referenceFact": "A situation where two or more transactions each hold locks and wait indefinitely for locks held by the other.",
+    "referenceFact": "A deadlock is a situation where two or more transactions each hold locks and are left waiting indefinitely for locks held by each other.",
     "expectedKeywords": ["lock", "waiting", "transaction"],
     "requiresCitation": false
   },
@@ -67,7 +67,7 @@
     "id": "acc-09",
     "category": "technical_explanation",
     "question": "What is the difference between synchronous and asynchronous I/O?",
-    "referenceFact": "Synchronous I/O blocks the calling thread until operation completes, while asynchronous I/O permits execution to continue while I/O proceeds in background.",
+    "referenceFact": "Synchronous I/O blocks the calling thread until complete, whereas asynchronous I/O uses an event loop to continue execution without blocking.",
     "expectedKeywords": ["block", "event loop", "asynchronous"],
     "requiresCitation": false
   },
@@ -75,7 +75,7 @@
     "id": "acc-10",
     "category": "technical_explanation",
     "question": "What is an index in a database and what is its trade-off?",
-    "referenceFact": "An index accelerates read retrieval speed at the cost of additional disk storage and slower write/update operations.",
+    "referenceFact": "An index accelerates read query performance at the cost of additional disk storage space and slower write operations.",
     "expectedKeywords": ["read", "write", "storage", "performance"],
     "requiresCitation": false
   },
@@ -115,7 +115,7 @@
     "id": "acc-15",
     "category": "insufficient_evidence",
     "question": "Who will win the FIFA World Cup in 2038?",
-    "referenceFact": "The 2038 World Cup has not occurred and cannot be known.",
+    "referenceFact": "The 2038 World Cup is in the future and has not yet occurred, so the winner is unknown and cannot be known.",
     "expectedKeywords": ["cannot be known", "future", "not yet", "unknown"],
     "requiresCitation": false
   },
@@ -123,7 +123,7 @@
     "id": "acc-16",
     "category": "insufficient_evidence",
     "question": "What did John Doe eat for breakfast this morning?",
-    "referenceFact": "Insufficient information about an unspecified individual.",
+    "referenceFact": "I cannot answer what John Doe ate for breakfast because I do not have access to unknown private personal data.",
     "expectedKeywords": ["cannot answer", "do not have", "unknown"],
     "requiresCitation": false
   },
@@ -199,9 +199,10 @@
     "id": "acc-25",
     "category": "unsupported_memory_refusal",
     "question": "Did I ask you about Rust memory safety yesterday?",
-    "referenceFact": "No matching records found in conversation history.",
+    "referenceFact": "I could not find any records of that; there are no matching records found in our conversation history.",
     "expectedKeywords": ["could not find", "no matching records"],
     "forbiddenKeywords": ["You asked about ownership and borrowing"],
     "requiresCitation": false
   }
 ]
+

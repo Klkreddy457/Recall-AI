@@ -9,6 +9,8 @@ export interface SeedConversation {
   id: string;
   title: string;
   ownerId: string;
+  summary?: string;
+  keyEntities?: string[];
   messages: SeedMessage[];
 }
 
@@ -20,6 +22,8 @@ export const SEED_CONVERSATIONS: SeedConversation[] = [
     id: 'conv-a-1010',
     title: 'RAG and Vector Databases',
     ownerId: EVAL_OWNER_ID,
+    summary: 'Discussion of Retrieval-Augmented Generation, vector databases, pgvector, Qdrant, Milvus, and Pinecone.',
+    keyEntities: ['RAG', 'database', 'vector search', 'pgvector', 'Qdrant', 'Milvus', 'Pinecone'],
     messages: [
       {
         id: 'msg-a-1',
@@ -51,6 +55,8 @@ export const SEED_CONVERSATIONS: SeedConversation[] = [
     id: 'conv-b-1011',
     title: 'PostgreSQL FTS vs Vector Search',
     ownerId: EVAL_OWNER_ID,
+    summary: 'Comparison between PostgreSQL database full-text search (tsvector) and semantic vector search engines.',
+    keyEntities: ['PostgreSQL', 'database', 'FTS', 'tsvector', 'vector search'],
     messages: [
       {
         id: 'msg-b-1',
@@ -70,6 +76,8 @@ export const SEED_CONVERSATIONS: SeedConversation[] = [
     id: 'conv-c-1012',
     title: 'Agentic AI Systems',
     ownerId: EVAL_OWNER_ID,
+    summary: 'Definition and architecture of Agentic AI, autonomous planning, and multi-step tool calls.',
+    keyEntities: ['Agentic AI', 'autonomous', 'planning', 'tools'],
     messages: [
       {
         id: 'msg-c-1',
@@ -106,3 +114,4 @@ export const SEED_CONVERSATIONS: SeedConversation[] = [
     ],
   },
 ];
+

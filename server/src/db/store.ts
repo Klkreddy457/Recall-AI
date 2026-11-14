@@ -135,9 +135,17 @@ export class InMemoryDataStore implements DataStore {
   }
 }
 
-// PostgreSQL Data Store Implementation with Automatic In-Memory Fallback
+export interface PostgresDataStoreOptions {
+  allowFallback?: boolean;
+}
+
+// PostgreSQL Data Store Implementation
 export class PostgresDataStore implements DataStore {
-  constructor(private pool: Pool) {}
+  private allowFallback: boolean;
+
+  constructor(private pool: Pool, options: PostgresDataStoreOptions = {}) {
+    this.allowFallback = options.allowFallback ?? false;
+  }
 
   async listConversations(ownerId: string, search?: string): Promise<ConversationRecord[]> {
     try {
@@ -156,7 +164,10 @@ export class PostgresDataStore implements DataStore {
       querySql += ` ORDER BY updated_at DESC`;
       const result = await this.pool.query<ConversationRecord>(querySql, params);
       return result.rows;
-    } catch {
+    } catch (err) {
+      if (!this.allowFallback) {
+        throw new Error(`Database error in listConversations: ${(err as Error).message}`);
+      }
       return globalInMemoryStore.listConversations(ownerId, search);
     }
   }
@@ -172,7 +183,10 @@ export class PostgresDataStore implements DataStore {
         [ownerId, title || 'New Conversation']
       );
       return result.rows[0]!;
-    } catch {
+    } catch (err) {
+      if (!this.allowFallback) {
+        throw new Error(`Database error in createConversation: ${(err as Error).message}`);
+      }
       return globalInMemoryStore.createConversation(ownerId, title);
     }
   }
@@ -184,7 +198,10 @@ export class PostgresDataStore implements DataStore {
         [id, ownerId]
       );
       return result.rows[0] || null;
-    } catch {
+    } catch (err) {
+      if (!this.allowFallback) {
+        throw new Error(`Database error in getConversation: ${(err as Error).message}`);
+      }
       return globalInMemoryStore.getConversation(id, ownerId);
     }
   }
@@ -202,7 +219,10 @@ export class PostgresDataStore implements DataStore {
       } else {
         await this.pool.query(`UPDATE conversations SET updated_at = NOW() WHERE id = $1`, [id]);
       }
-    } catch {
+    } catch (err) {
+      if (!this.allowFallback) {
+        throw new Error(`Database error in updateConversation: ${(err as Error).message}`);
+      }
       await globalInMemoryStore.updateConversation(id, updates);
     }
   }
@@ -214,7 +234,10 @@ export class PostgresDataStore implements DataStore {
         [id, ownerId]
       );
       return (result.rowCount ?? 0) > 0;
-    } catch {
+    } catch (err) {
+      if (!this.allowFallback) {
+        throw new Error(`Database error in deleteConversation: ${(err as Error).message}`);
+      }
       return globalInMemoryStore.deleteConversation(id, ownerId);
     }
   }
@@ -231,7 +254,10 @@ export class PostgresDataStore implements DataStore {
         [conversationId]
       );
       return result.rows;
-    } catch {
+    } catch (err) {
+      if (!this.allowFallback) {
+        throw new Error(`Database error in listMessages: ${(err as Error).message}`);
+      }
       return globalInMemoryStore.listMessages(conversationId);
     }
   }
@@ -264,7 +290,10 @@ export class PostgresDataStore implements DataStore {
         ]
       );
       return result.rows[0]!;
-    } catch {
+    } catch (err) {
+      if (!this.allowFallback) {
+        throw new Error(`Database error in insertMessage: ${(err as Error).message}`);
+      }
       return globalInMemoryStore.insertMessage(message);
     }
   }

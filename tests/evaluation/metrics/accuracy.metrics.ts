@@ -20,3 +20,4 @@ export function calculateCitationCoverage(
   if (claimsRequiringCitation === 0) return 1.0;
   return Math.round((supportedClaims / claimsRequiringCitation) * 100) / 100;
 }
+

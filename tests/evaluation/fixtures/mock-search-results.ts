@@ -34,3 +34,4 @@ export const MOCK_SEARCH_RESULTS: Record<string, SearchResult[]> = {
     },
   ],
 };
+

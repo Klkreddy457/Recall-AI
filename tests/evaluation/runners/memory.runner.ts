@@ -88,18 +88,32 @@ export async function runMemorySuite(): Promise<{
         retrieved.push({ id: m.id, content: m.content });
       }
     } else {
-      // Lexical / Keyword match (FTS emulation with Q&A pairs)
+      // Lexical / Keyword match (FTS emulation with Q&A pairs & conversation summaries)
       const qLower = query.toLowerCase();
+      const stem = (w: string) => (w.length > 4 ? w.replace(/(es|s|ed|ing)$/, '') : w);
       const keywords = qLower
         .replace(/[?.,!]/g, '')
         .split(/\s+/)
         .filter((w) => w.length > 2 && !['what', 'when', 'which', 'that', 'this', 'your', 'tell', 'about', 'did'].includes(w));
 
+      // Direct message content matches
       for (const m of ownerMessages) {
         const mLower = m.content.toLowerCase();
-        const matches = keywords.some((k) => mLower.includes(k));
+        const matches = keywords.some((k) => mLower.includes(k) || mLower.includes(stem(k)));
         if (matches) {
           retrieved.push({ id: m.id, content: m.content });
+        }
+      }
+
+      // Evidence-gated conversation summaries & key entities matches (Decision 6)
+      const ownerConvs = SEED_CONVERSATIONS.filter((c) => c.ownerId === ownerId);
+      for (const conv of ownerConvs) {
+        const summaryText = `${conv.title} ${conv.summary || ''} ${(conv.keyEntities || []).join(' ')}`.toLowerCase();
+        const matchesSummary = keywords.some((k) => summaryText.includes(k) || summaryText.includes(stem(k)));
+        if (matchesSummary) {
+          for (const m of conv.messages) {
+            retrieved.push({ id: m.id, content: m.content });
+          }
         }
       }
     }

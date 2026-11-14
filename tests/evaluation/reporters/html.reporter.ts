@@ -386,3 +386,4 @@ export function generateHtmlDashboard(data: any): string {
   fs.writeFileSync(htmlPath, htmlContent, 'utf-8');
   return htmlPath;
 }
+

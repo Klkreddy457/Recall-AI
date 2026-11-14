@@ -59,3 +59,4 @@
     "forbiddenSubstrings": ["tool_call: bash", "tool_call: run_command"]
   }
 ]
+

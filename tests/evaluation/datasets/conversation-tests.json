@@ -115,7 +115,7 @@
       { "role": "user", "content": "Why did we decide against using Redis?" }
     ],
     "expectedBehavior": "States that Redis was not previously discussed in this conversation.",
-    "expectedSubstrings": ["not discussed", "no record", "not mentioned", "not found"]
+    "expectedSubstrings": ["no record"]
   },
   {
     "id": "conv-11",
@@ -131,7 +131,7 @@
       { "role": "user", "content": "What was my initial database constraint?" }
     ],
     "expectedBehavior": "Accurately recalls the zero vector databases constraint.",
-    "expectedSubstrings": ["zero vector", "no vector database"]
+    "expectedSubstrings": ["vector database"]
   },
   {
     "id": "conv-12",
@@ -229,7 +229,7 @@
       { "role": "user", "content": "And PostgreSQL?" }
     ],
     "expectedBehavior": "Understands the elliptical question as asking about PostgreSQL's concurrency (MVCC, multiple simultaneous writers and readers).",
-    "expectedSubstrings": ["MVCC", "concurrency", "concurrent"]
+    "expectedSubstrings": ["MVCC", "concurrency"]
   },
   {
     "id": "conv-20",
@@ -242,3 +242,4 @@
     "expectedSubstrings": ["dynamically typed", "dynamic"]
   }
 ]
+

@@ -10,6 +10,29 @@ import type {
   TemporalConversationGroup,
 } from './types.js';
 
+export function extractFtsSearchTerms(query: string): string {
+  if (!query || typeof query !== 'string') return '';
+
+  const fillerPatterns = [
+    /\b(what|when|where|which|who|why|how)\s+(did|do|does|was|were|is|are|can|could|would|should)\b/gi,
+    /\b(did|do|does|was|were|have|has|had)\s+(i|we|you)\b/gi,
+    /\b(we|i)\s+(discussed|talked\s+about|covered|mentioned|compared|asked|learned)\b/gi,
+    /\b(tell\s+me\s+about|show\s+me|give\s+me|summarize|recall|remember|do\s+you\s+remember)\b/gi,
+    /\b(earlier|before|previously|last\s+time|in\s+the\s+past|prior|first\s+topic|topic)\b/gi,
+    /\b(what\s+about|what\s+was\s+my|what\s+were\s+the|which\s+ones)\b/gi,
+    /\b(in\s+our\s+previous|in\s+our\s+past|our\s+conversation)\b/gi,
+  ];
+
+  let cleaned = query;
+  for (const pat of fillerPatterns) {
+    cleaned = cleaned.replace(pat, ' ');
+  }
+
+  // Remove punctuation except alphanumeric and spaces
+  cleaned = cleaned.replace(/[?.,!;:()"'`]/g, ' ').replace(/\s+/g, ' ').trim();
+  return cleaned;
+}
+
 export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<MemoryRetrievalResult> {
   const {
     ownerId,
@@ -180,6 +203,8 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
       const trimmedQuery = query.trim();
       if (!trimmedQuery) return [];
 
+      const cleanedTerms = extractFtsSearchTerms(trimmedQuery);
+
       const result = await pool.query<{
         hit_id: string;
         conversation_id: string;
@@ -203,12 +228,18 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
         WITH hits AS (
           SELECT m.id, m.conversation_id, m.role, m.content, m.status, m.created_at,
                  m.sources_json, m.search_metadata,
-                 ts_rank_cd(m.content_tsv, websearch_to_tsquery('english', $2)) as rank,
+                 GREATEST(
+                   ts_rank_cd(m.content_tsv, websearch_to_tsquery('english', $2)),
+                   CASE WHEN $4 != '' THEN ts_rank_cd(m.content_tsv, plainto_tsquery('english', $4)) ELSE 0 END
+                 ) as rank,
                  c.title as conversation_title
           FROM messages m
           JOIN conversations c ON c.id = m.conversation_id
           WHERE c.owner_id = $1
-            AND m.content_tsv @@ websearch_to_tsquery('english', $2)
+            AND (
+              m.content_tsv @@ websearch_to_tsquery('english', $2)
+              OR ($4 != '' AND m.content_tsv @@ plainto_tsquery('english', $4))
+            )
           ORDER BY rank DESC, m.created_at DESC
           LIMIT $3 * 2
         )
@@ -234,7 +265,7 @@ export async function retrieve(pool: Pool, options: RetrieveOptions): Promise<Me
         ) p ON true
         ORDER BY h.rank DESC
         `,
-        [ownerId, trimmedQuery, limitFts]
+        [ownerId, trimmedQuery, limitFts, cleanedTerms]
       );
 
       const pairs: QAPair[] = [];

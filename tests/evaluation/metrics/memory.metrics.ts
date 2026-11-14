@@ -23,3 +23,4 @@ export function calculateUnsupportedMemoryRate(
   if (emptyMemoryQueries === 0) return 0;
   return Math.round((hallucinatedClaims / emptyMemoryQueries) * 100) / 100;
 }
+

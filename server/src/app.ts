@@ -32,7 +32,7 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
   } else if (opts.pool !== undefined) {
     pool = opts.pool;
     if (pool) {
-      store = new PostgresDataStore(pool);
+      store = new PostgresDataStore(pool, { allowFallback: cfg.NODE_ENV !== 'production' });
     } else {
       store = globalInMemoryStore;
     }
@@ -43,9 +43,15 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
       const client = await candidatePool.connect();
       client.release();
       pool = candidatePool;
-      store = new PostgresDataStore(pool);
-    } catch {
-      // PostgreSQL is not running; use in-memory store
+      store = new PostgresDataStore(pool, { allowFallback: cfg.NODE_ENV !== 'production' });
+    } catch (err) {
+      if (cfg.NODE_ENV === 'production') {
+        throw new Error(
+          `Production database connection failed: Unable to connect to PostgreSQL using DATABASE_URL. Reason: ${(err as Error).message}`
+        );
+      }
+      // Non-production fallback with explicit warning
+      console.warn(`[WARN] PostgreSQL offline (${(err as Error).message}). Using in-memory fallback for local development.`);
       pool = null;
       store = globalInMemoryStore;
     }
@@ -106,11 +112,13 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
   if (pool) {
     await app.register(healthRoutes(pool));
   } else {
-    // Health route for in-memory mode
+    // Health route when postgres pool is offline
     app.get('/health', async (_req, reply) => {
-      return reply.status(200).send({
-        status: 'ok',
+      const isProd = cfg.NODE_ENV === 'production';
+      return reply.status(isProd ? 503 : 200).send({
+        status: isProd ? 'error' : 'degraded',
         db: 'in-memory (postgres offline)',
+        connected: false,
         timestamp: new Date().toISOString(),
       });
     });

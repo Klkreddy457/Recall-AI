@@ -54,6 +54,45 @@ export function parseTemporalDate(
   if (!text || typeof text !== 'string') return null;
 
   const tzOffset = getTimezoneOffsetMinutes(timeZone, referenceNow);
+
+  // Special handling for "<time_of_day> of <date>" (e.g. "morning of October 10", "afternoon of October 11")
+  const timeOfDayOfDateMatch = text.match(
+    /\b(morning|afternoon|evening|night)\s+of\s+([A-Za-z]+(?:\s+\d{1,2})?(?:,?\s+\d{4})?)/i
+  );
+  if (timeOfDayOfDateMatch) {
+    const period = timeOfDayOfDateMatch[1]!.toLowerCase();
+    const dateText = timeOfDayOfDateMatch[2]!;
+    const dateParsed = chrono.parse(
+      dateText,
+      { instant: referenceNow, timezone: tzOffset },
+      { forwardDate: false }
+    );
+    if (dateParsed && dateParsed.length > 0) {
+      const s = dateParsed[0]!.start;
+      let sYear = s.get('year') ?? referenceNow.getUTCFullYear();
+      const sMonth = s.get('month') ?? (referenceNow.getUTCMonth() + 1);
+      const sDay = s.get('day') ?? referenceNow.getUTCDate();
+      if (!s.isCertain('year')) {
+        const tentative = localToUtc(sYear, sMonth, sDay, 0, 0, 0, timeZone);
+        if (tentative.getTime() > referenceNow.getTime()) {
+          sYear -= 1;
+        }
+      }
+      let startHour = 6;
+      let endHour = 12;
+      if (period === 'afternoon') {
+        startHour = 12;
+        endHour = 18;
+      } else if (period === 'evening' || period === 'night') {
+        startHour = 18;
+        endHour = 24;
+      }
+      const start = localToUtc(sYear, sMonth, sDay, startHour, 0, 0, timeZone);
+      const end = localToUtc(sYear, sMonth, sDay, endHour, 0, 0, timeZone);
+      return { start, end, text: timeOfDayOfDateMatch[0] };
+    }
+  }
+
   const parsedResults = chrono.parse(
     text,
     { instant: referenceNow, timezone: tzOffset },

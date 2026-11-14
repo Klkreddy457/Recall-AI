@@ -162,3 +162,4 @@ This audit evaluates the actual code implementation of **Recall AI**, distinguis
 ## 5. Audit Conclusion
 
 The Recall AI codebase conforms rigorously to the specifications laid out in `AGENTS.md` and `DESIGN.md`. The core invariants—single `web_search` tool, parallel memory retrieval without an LLM router, single search per turn, temporal parsing in local timezone, citation validation, and interrupted turn persistence—are genuinely implemented in production code with no fabricated stubs.
+

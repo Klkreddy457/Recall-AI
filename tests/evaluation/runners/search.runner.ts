@@ -45,6 +45,13 @@ export async function runSearchSuite(): Promise<{
     // Prepare simulated Fake LLM
     let fakeLLM: FakeLLMClient;
     if (shouldSearch) {
+      let secondTurnTokens = ['Here is the verified live information [1].'];
+      if (c.simulateError) {
+        secondTurnTokens = ['Search unavailable: search service encountered an error and is currently unavailable.'];
+      } else if (c.simulateEmptyResults) {
+        secondTurnTokens = ['No search results found: could not find any live records.'];
+      }
+
       fakeLLM = new FakeLLMClient([
         {
           toolCall: {
@@ -54,7 +61,7 @@ export async function runSearchSuite(): Promise<{
           },
         },
         {
-          tokens: ['Here is the verified live information [1].'],
+          tokens: secondTurnTokens,
         },
       ]);
     } else {
@@ -200,3 +207,4 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     }
   });
 }
+
