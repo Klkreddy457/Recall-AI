@@ -10,3 +10,4 @@ CREATE INDEX IF NOT EXISTS idx_messages_event_date
 
 CREATE INDEX IF NOT EXISTS idx_messages_conversation_event_date 
   ON messages (conversation_id, event_date);
+

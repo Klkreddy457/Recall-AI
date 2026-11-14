@@ -119,3 +119,4 @@ export function normalizeSearchQuery(query: string): string {
     .replace(/\s+/g, ' ')
     .trim();
 }
+

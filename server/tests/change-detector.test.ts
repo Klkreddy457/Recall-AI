@@ -105,3 +105,4 @@ describe('Historical Change-Detection Engine', () => {
     expect(table).toContain('+16.67%');
   });
 });
+
